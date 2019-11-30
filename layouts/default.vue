@@ -1,9 +1,26 @@
 <template>
   <div>
+    <!-- //header头部显示;;要用大写 -->
+    <Header/>
+    <!-- nuxt内容占位 -->
     <nuxt />
+    <!-- footer页脚显示 -->
+    <Footer/>
   </div>
 </template>
 
+<script>
+//引入公共样式组件header和footer
+import Header from '@/components/header.vue';
+import Footer from '@/components/footer.vue';
+export default{
+//注册子组件
+ components: {
+    Header,
+    Footer
+  }
+}
+</script>
 <style>
 html {
   font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
