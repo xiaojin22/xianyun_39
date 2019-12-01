@@ -13,8 +13,8 @@
           >{{item}}</span>
         </el-row>
 
-        <!-- 登录功能组件 -->
-        <!-- <LoginForm v-if="currentTab == 0"/> -->
+        <!-- 登录功能组件 当索引值为0;显示登录-->
+        <LoginForm v-if="currentTab == 0"/>
 
         <!-- 注册功能组件 -->
         <!-- <RegisterForm v-if="currentTab == 1"/> -->
@@ -24,6 +24,8 @@
 </template>
 
 <script>
+//引入login子组件
+import LoginForm from '@/components/user/loginForm';
 export default {
   data (){
     return {
@@ -31,6 +33,11 @@ export default {
       currentTab:0,
     }
   },
+  components:{
+    //注册子组件
+     LoginForm
+  }
+  ,
   methods:{
     //单击实现登录，注册tep的切换
     handlerChange(index){
