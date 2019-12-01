@@ -42,22 +42,23 @@ export default {
       submitLogin(loginForm){
         //   表单验证；在手机号和密码提交前进行验证
         this.$refs.loginForm.validate((valid) => {
-          if (valid) {
-              //验证成功；；发送axios实现登录
-            this.$axios({
-                url:"/accounts/login",
-                method:"POST",
-                data:this.loginForm//将请求的数据传递过去
-            }).then((res)=>{
-                console.log(res.data)
-                //用户登录成功，将数据存储到vuex中;;将commit提交到 setUserInfo(state, data)；数据对应
-                this.$store.commit("user/setUserInfo",res.data)
-            })
-          } else {
-              //验证失败；终止请求的发送；提示错误
-            this.$message.error('请求失败，重新输入')
-            return false;
-          }
+        //   if (valid) {
+        //       //验证成功；；发送axios实现登录
+        //     this.$axios({
+        //         url:"/accounts/login",
+        //         method:"POST",
+        //         data:this.loginForm//将请求的数据传递过去
+        //     }).then((res)=>{
+        //         console.log(res.data)
+        //         //用户登录成功，将数据存储到vuex中;;将commit提交到 setUserInfo(state, data)；数据对应
+        //         this.$store.commit("user/setUserInfo",res.data)
+        //     })
+        //   } else {
+        //       //验证失败；终止请求的发送；提示错误
+        //     this.$message.error('请求失败，重新输入')
+        //     return false;
+        //   }
+        
         });
   }
 }

@@ -7,8 +7,7 @@ export const state = () => ({
   }
 })
 
-// 实现登录 ；；把登录请求放到store/user.js中统一管理。
-// 用来改变数据状态的
+// 用来改变数据状态的  
 export const mutations = {
   // 保存用户信息到state
   // 每一个属性都是一个函数
@@ -20,3 +19,26 @@ export const mutations = {
     state.userInfo = data;//data就是我们要发送axios请求回来的数据；
   }
 }
+
+// 实现登录 ；；把登录请求放到store/user.js中统一管理。
+// 由于mutation只能执行同步代码，对应异步代码；ajax请求，需要使用actions
+export const actions={
+     // 里面每一个属性都是函数l;;;;;（commit是$store本身具有的方法，）
+    // 两个参数,第一个是 {commit} 将这个仓库对象本身的 commit 函数解构出来
+    // 第二个参数就是我们需要传进来的数据
+    login({commit},data){
+        return this.$axios({
+            url: "/accounts/login",
+            method: "POST",
+            data
+        }).then((res)=>{
+            const data =res.data
+            //用户登录成功，将数据存储到vuex中;;将commit提交到 setUserInfo(state, data)；数据对应
+          commit("setUserInfo",data)
+          return data
+        })
+    }
+}
+
+//第一个return；返回的是promise实例对象；可以直接.then((res)=>{})
+//第二个return；返回的是res.data(请求回来的数据)，给到.then中的res使用
