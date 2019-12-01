@@ -19,9 +19,9 @@
 
             <!-- 登录/用户信息 -->
             <el-row type="flex" align="middle">
-
-                <!-- 如果用户存在则展示用户信息，用户数据来自store -->
-                <el-dropdown v-if="false">
+               
+                <!-- 如果用户存在则展示用户信息，用户数据来自store；；根据数据中的token进行判断 -->
+                <el-dropdown v-if="$store.state.user.userInfo.token">
                     <el-row type="flex" align="middle" class="el-dropdown-link">
                         <nuxt-link to="#">
                             <img src="http://157.122.54.189:9093/images/pic_sea.jpeg"/>
@@ -53,6 +53,10 @@ export default {
     methods: {
         // 用户退出
         handleLogout(){},
+    },
+    mounted(){
+        console.log(1234)
+        console.log(this.$store.state.user.userInfo.token)
     }
 }
 </script>

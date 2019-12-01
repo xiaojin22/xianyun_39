@@ -49,7 +49,9 @@ export default {
                 method:"POST",
                 data:this.loginForm//将请求的数据传递过去
             }).then((res)=>{
-                console.log(res)
+                console.log(res.data)
+                //用户登录成功，将数据存储到vuex中;;将commit提交到 setUserInfo(state, data)；数据对应
+                this.$.commit("user/setUserInfo",res.data)
             })
           } else {
               //验证失败；终止请求的发送；提示错误
