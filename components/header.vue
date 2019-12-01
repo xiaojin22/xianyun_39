@@ -24,7 +24,7 @@
                 <el-dropdown v-if="$store.state.user.userInfo.token">
                     <el-row type="flex" align="middle" class="el-dropdown-link">
                         <nuxt-link to="#">
-                            <img src="http://157.122.54.189:9093/images/pic_sea.jpeg"/>
+                            <img  :src="$axios.defaults.baseURL+$store.state.user.userInfo.defaultAvatar"/>
                             用户名
                         </nuxt-link>
                         <i class="el-icon-caret-bottom el-icon--right"></i>

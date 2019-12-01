@@ -51,7 +51,7 @@ export default {
             }).then((res)=>{
                 console.log(res.data)
                 //用户登录成功，将数据存储到vuex中;;将commit提交到 setUserInfo(state, data)；数据对应
-                this.$.commit("user/setUserInfo",res.data)
+                this.$store.commit("user/setUserInfo",res.data)
             })
           } else {
               //验证失败；终止请求的发送；提示错误
