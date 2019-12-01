@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    {{$store.state.user.userInfo.token}}
     <!-- 幻灯片;;elemnt—ui；轮播图 -->
     <el-carousel :interval="5000" arrow="always">
       <el-carousel-item v-for="(value, index) in imgLunbo" :key="index">
