@@ -27,6 +27,7 @@ export const actions={
     // 两个参数,第一个是 {commit} 将这个仓库对象本身的 commit 函数解构出来
     // 第二个参数就是我们需要传进来的数据
     login({commit},data){
+        // 这里的 return 是为了能够对外返回一个带数据的 promise 方便外面继续进行处理
         return this.$axios({
             url: "/accounts/login",
             method: "POST",

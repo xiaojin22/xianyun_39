@@ -58,7 +58,17 @@ export default {
         //     this.$message.error('请求失败，重新输入')
         //     return false;
         //   }
-        
+        //使用vuex 的actons 替换这里直接写的ajax请求
+        // this.$store.dispatch("user/login",this.loginForm)
+        this.$store.dispatch("user/login",this.loginForm).then((res)=>{
+            //登录成功时提示；
+            this.$message.success('登录成功,正在挑战')
+            //跳转到首页；；用replace实现跳转；
+            setTimeout(()=>{
+                this.$router.replace("/")
+            },1000)
+        })
+
         });
   }
 }
