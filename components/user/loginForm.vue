@@ -7,12 +7,12 @@
         <el-input v-model="loginForm.username" placeholder="手机号/用户名"></el-input>
       </el-form-item>
       <!-- //密码登录 -->
-      <el-form-item class="form-text" prop="passwrod">
+      <el-form-item class="form-text" prop="password">
         <el-input v-model="loginForm.password" placeholder="输入密码" type="password"></el-input>
       </el-form-item>
       <!-- //提交登录 -->
       <el-form-item>
-        <el-button type="primary" class="submit" @click="submitLogin">登录</el-button>
+        <el-button type="primary" class="submit" @click="submitLogin(loginForm)">登录</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -33,16 +33,32 @@ export default {
         username: [
           { required: true, message: "请输入手机号/用户名", trigger: "blur" }
         ],
-        passwrod: [{ required: true, message: "请输入密码", trigger: "blur" }]
+        password: [{ required: true, message: "请输入密码", trigger: "blur" }]
       }
     };
   },
   methods:{
       //提交登录事件
-      submitLogin(){
-          console.log(123)
-      }
+      submitLogin(loginForm){
+        //   表单验证；在手机号和密码提交前进行验证
+        this.$refs.loginForm.validate((valid) => {
+          if (valid) {
+              //验证成功；；发送axios实现登录
+            this.$axios({
+                url:"/accounts/login",
+                method:"POST",
+                data:this.loginForm//将请求的数据传递过去
+            }).then((res)=>{
+                console.log(res)
+            })
+          } else {
+              //验证失败；终止请求的发送；提示错误
+            this.$message.error('请求失败，重新输入')
+            return false;
+          }
+        });
   }
+}
 };
 </script>
 
