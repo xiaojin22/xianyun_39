@@ -64,7 +64,13 @@ export default {
   },
   methods: {
     // 用户退出
-    handleLogout () {}
+    handleLogout () {
+      // 这里是点击退出登录
+      // 需要调用 store 里面的 mutation 清理用户数据；；也就是user中的清除用户数据；实现退出
+      this.$store.commit('user/cleanUserInfo')
+      // 退出提示
+      this.$message.success('退出成功')
+    }
   }
 }
 </script>

@@ -17,6 +17,13 @@ export const mutations = {
   setUserInfo (state, data) {
     // 这里是负责修改用户数据的
     state.userInfo = data// data就是我们要发送axios请求回来的数据；
+  },
+  // 清除用户数据；；就是说将将本地中的store的数据清除
+  cleanUserInfo (state, info) {
+    if (process.browser) {
+      localStorage.removeItem('store')
+    }
+    state.userInfo = {}// 令其等于空
   }
 }
 
