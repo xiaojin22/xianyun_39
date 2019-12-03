@@ -8,10 +8,11 @@
       <!-- //验证码 -->
       <el-form-item class="form-item" prop="captcha">
         <el-input
+          v-model="registerForm.captcha"
           placeholder="验证码"
         >
           <template slot="append">
-            <!-- //验证码单击事件 -->
+            <!-- 单击验证码事件 -->
             <el-button @click="handleSendCaptcha">
               发送验证码
             </el-button>
@@ -27,8 +28,12 @@
         <el-input v-model="registerForm.password" type="password" placeholder="密码" />
       </el-form-item>
       <!-- //确认密码 -->
-      <el-form-item prop=" checkpassword">
-        <el-input v-model="registerForm. checkpassword" type="password" placeholder="确认密码" />
+      <el-form-item class="form-item" prop="checkpassword">
+        <el-input
+          v-model="registerForm.checkpassword"
+          placeholder="确认密码"
+          type="password"
+        />
       </el-form-item>
       <!-- //注册 -->
       <el-form-item>
@@ -95,7 +100,7 @@ export default {
         // 在elment-ui中提示
         this.$confirm('手机号码不能为空', '提示', {
           confirmButtonText: '确定',
-          showConfirmButton: 'false',
+          showCancelButton: false,
           type: 'warning'
         })
         return
@@ -104,20 +109,42 @@ export default {
       if (this.registerForm.username.length !== 11) {
         this.$confirm('手机号码格式错误', '提示', {
           confirmButtonText: '确定',
-          showConfirmButton: 'false',
+          showCancelButton: false,
           type: 'warning'
         })
         return
       }
-      window.console.log(this.registerForm)
+      // 验证码发送axios请求
+      this.$axios({
+        url: `captchas`,
+        method: 'POST',
+        data: {
+          tel: this.registerForm.username// 模拟将验证码返回到手机上
+        }
+      }).then((res) => {
+        const { code } = res.data// code是提示的手机验证码
+        this.$confirm(`模拟手机验证码为：${code}`, '提示', {
+          confirmButtonText: '确定',
+          showCancelButton: false,
+          type: 'warning'
+        })
+      })
     },
-    // 提交注册
+    // 提交注册；提交注册前进行验证规则
     submitForm (registerForm) {
       this.$refs.registerForm.validate((valid) => {
         if (valid) {
-          alert('submit!')
-        } else {
-          return false
+          // 注册提交;;;;{ checkpassword, ...props }该方法是将checkpassword从this.registerForm中提取出来；形成一个新的数组props
+          const { checkpassword, ...props } = this.registerForm// 与展开运算符是相反的
+          window.console.log(props)
+          // 发送axios请求
+          this.$axios({
+            url: '/accounts/register',
+            method: 'POST',
+            data: props// 要发送的请求数据
+          }).then((res) => {
+            window.console.log(res)
+          })
         }
       })
     }

@@ -37,7 +37,8 @@ export default {
   */
   plugins: [
     '@/plugins/element-ui',
-    { src: '@/plugins/localStorage', ssr: false }// 引入本地存储中的localStorag中的store；；ssr；false；表示在服务器端不显示
+    { src: '@/plugins/localStorage', ssr: false }, // 引入本地存储中的localStorag中的store；；ssr；false；表示在服务器端不显示
+    '@/plugins/axios' // 调用插件
   ],
 
   /*
