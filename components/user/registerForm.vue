@@ -47,7 +47,7 @@ export default {
     const validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请再次输入密码'))
-      } else if (value !== this.ruleForm.pass) {
+      } else if (value !== this.registerForm.password) {
         callback(new Error('两次输入密码不一致!'))
       } else {
         callback()
@@ -88,11 +88,30 @@ export default {
     }
   },
   methods: {
-    // 验证码单击事件
+    // 验证码单击事件(发送验证码)；；对注册的手机号/用户名；要求；不能为空；长度为11；
     handleSendCaptcha () {
-
+      // 判断用户输入的手机号；手机号不能为空
+      if (!this.registerForm.username) {
+        // 在elment-ui中提示
+        this.$confirm('手机号码不能为空', '提示', {
+          confirmButtonText: '确定',
+          showConfirmButton: 'false',
+          type: 'warning'
+        })
+        return
+      }
+      // 手机号长度为11位
+      if (this.registerForm.username.length !== 11) {
+        this.$confirm('手机号码格式错误', '提示', {
+          confirmButtonText: '确定',
+          showConfirmButton: 'false',
+          type: 'warning'
+        })
+        return
+      }
+      window.console.log(this.registerForm)
     },
-    // 注册
+    // 提交注册
     submitForm (registerForm) {
       this.$refs.registerForm.validate((valid) => {
         if (valid) {
