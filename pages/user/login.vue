@@ -8,43 +8,44 @@
           <span
             :class="{active: currentTab === index}"
             v-for="(item, index) in [`登录`, `注册`]"
-            :key="index" 
-            @click="handlerChange(index)"         
-          >{{item}}</span>
+            :key="index"
+            @click="handlerChange(index)"
+          >{{ item }}</span>
         </el-row>
 
         <!-- 登录功能组件 当索引值为0;显示登录-->
-        <LoginForm v-if="currentTab == 0"/>
+        <LoginForm v-if="currentTab == 0" />
 
         <!-- 注册功能组件 -->
-        <!-- <RegisterForm v-if="currentTab == 1"/> -->
+        <RegisterForm v-if="currentTab == 1" />
       </div>
     </el-row>
   </div>
 </template>
 
 <script>
-//引入login子组件
-import LoginForm from '@/components/user/loginForm';
+// 引入login子组件
+import LoginForm from '@/components/user/loginForm'
+import RegisterForm from '@/components/user/registerForm'
 export default {
-  data (){
+  components: {
+    // 注册子组件
+    LoginForm,
+    RegisterForm
+  },
+  data () {
     return {
-      //实现登录，注册的tep切换；当前索引为0；
-      currentTab:0,
+      // 实现登录，注册的tep切换；当前索引为0；
+      currentTab: 0
     }
   },
-  components:{
-    //注册子组件
-     LoginForm
-  }
-  ,
-  methods:{
-    //单击实现登录，注册tep的切换
-    handlerChange(index){
-      this.currentTab=index
+  methods: {
+    // 单击实现登录，注册tep的切换
+    handlerChange (index) {
+      this.currentTab = index
     }
   }
-};
+}
 </script>
 
 <style scoped lang="less">
@@ -91,4 +92,3 @@ export default {
   }
 }
 </style>
-
