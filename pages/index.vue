@@ -1,16 +1,15 @@
 <template>
   <div class="container">
-    {{$store.state.user.userInfo.token}}
     <!-- 幻灯片;;elemnt—ui；轮播图 -->
     <el-carousel :interval="5000" arrow="always">
       <el-carousel-item v-for="(value, index) in imgLunbo" :key="index">
         <div
-          class="banner-image"
           :style="`
                 background:url(${$axios.defaults.baseURL}${value.url}) center center no-repeat;
                 background-size:contain contain;
                 `"
-        ></div>
+          class="banner-image"
+        />
       </el-carousel-item>
     </el-carousel>
     <!-- 搜索框 -->
@@ -18,18 +17,21 @@
       <div class="search-bar">
         <!-- tab栏 -->
         <el-row type="flex" class="search-tab">
-          <span v-for="(value,index) in searchData" :key="index"
-          :class="{active:index===currentSearch}"
-          @click="headleSearch(index)"
+          <span
+            v-for="(value,index) in searchData"
+            :key="index"
+            :class="{active:index===currentSearch}"
+            @click="handleChangeTab(index)"
           >
-            <i>{{value.name}}</i>
+            <i>{{ value.name }}</i>
           </span>
         </el-row>
 
         <!-- 输入框 -->
         <el-row type="flex" align="middle" class="search-input">
-          <input :placeholder="searchData[currentSearch].placeholder" />
-          <i class="el-icon-search"></i>
+          <input :placeholder="searchData[currentSearch].placeholder">
+          <!-- //单击搜索事件 -->
+          <i @click="handleSearch" class="el-icon-search" />
         </el-row>
       </div>
     </div>
@@ -38,46 +40,61 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
-      //轮播图数据
+      // 轮播图数据
       imgLunbo: [],
-      //搜索数据
+      // 搜索数据
       searchData: [
         {
-          name: "旅游攻略",
-          placeholder: "请输入搜索城市"
+          name: '旅游攻略',
+          placeholder: '请输入搜索城市'
         },
         {
-          name: "机票",
-          placeholder: "请输入出发地"
+          name: '酒店',
+          placeholder: '请输入城市搜索酒店'
         },
         {
-          name: "酒店",
-          placeholder: "请输入城市搜索酒店"
+          name: '机票',
+          placeholder: '请输入出发地'
         }
       ],
-      //teb切换
-      currentSearch:0,
-    };
+      // teb切换
+      currentSearch: 0
+    }
   },
-  //获取轮播数据
-  mounted() {
+  // 获取轮播数据
+  mounted () {
     this.$axios({
-      url: "/scenics/banners"
-    }).then(res => {
-      console.log(res);
-      this.imgLunbo = res.data.data;
-    });
+      url: '/scenics/banners'
+    }).then((res) => {
+      window.console.log(res)
+      this.imgLunbo = res.data.data
+    })
   },
- methods:{
-    //单击实现搜索
-    headleSearch(index){
-      //实现菜单高亮
-     this.currentSearch=index
+  methods: {
+    // // 单击实现Tab
+    // handleChangeTab (index) {
+    //   // 实现菜单高亮
+    //   this.currentSearch = index
+    // },
+    handleSearch () {
+      if (this.currentSearch === 0) {
+        this.$router.push('/post')
+      }
+      if (this.currentSearch === 1) {
+        this.$router.push('/hotel')
+      }
+    },
+    handleChangeTab (index) {
+      if (index === 2) {
+        this.$router.push('/air')
+      } else {
+        this.currentSearch = index
+      }
     }
   }
-};
+}
 </script>
 
 <style scoped lang="less">

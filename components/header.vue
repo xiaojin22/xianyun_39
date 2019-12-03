@@ -61,8 +61,6 @@
 <script>
 export default {
   mounted () {
-    console.log(1234)
-    console.log(this.$store.state.user.userInfo.token)
   },
   methods: {
     // 用户退出
