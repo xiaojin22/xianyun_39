@@ -11,6 +11,47 @@
         <i :class="item.icon" />{{ item.name }}
       </span>
     </el-row>
+    <!-- //form表单中包括机票搜索部分 -->
+    <el-form ref="form" class="search-form-content" label-width="80px">
+      <!-- //出发城市 -->
+      <el-form-item label="出发城市">
+        <!-- //带输入建议的输入框 -->
+        <el-autocomplete
+          v-model="departCity"
+          :fetch-suggestions="getDepartCityData"
+          class="inline-input"
+          placeholder="请搜索出发城市"
+        />
+      </el-form-item>
+      <!-- //到达城市 -->
+      <el-form-item label="到达城市">
+        <!-- //带输入建议的输入框 -->
+        <el-autocomplete
+          v-model="destCity"
+          :fetch-suggestions="getDestCityData"
+          class="inline-input"
+          placeholder="请搜索到达城市"
+        />
+      </el-form-item>
+      <!-- //出发时间 -->
+      <el-form-item label="出发时间">
+        <el-date-picker
+          v-model="form.departDate"
+          type="date"
+          placeholder="选择日期"
+        />
+      </el-form-item>
+      <!-- //搜索按钮 -->
+      <el-form-item>
+        <el-button @click="handleSubmit" type="primary" icon="el-icon-search" style="width:100%;">
+          搜索
+        </el-button>
+      </el-form-item>
+      <!-- //换的样式 -->
+      <div class="reverse">
+        <span @click="handleReverse">换</span>
+      </div>
+    </el-form>
   </div>
 </template>
 
@@ -24,13 +65,34 @@ export default {
         { icon: 'iconfont iconshuangxiang', name: '往返' }
       ],
       // teb切换的当前索引值
-      currentTab: 0
+      currentTab: 0,
+      form: {
+        departCity: '', // 出发城市
+        destCity: '', // 到达城市
+        departDate: ''// 定义日期选择器的v-model绑定的值
+      }
     }
   },
   methods: {
     // 实现teb切换的方法
     handleSearchTab (item, index) {
       // window.console.log(1234)
+    },
+    // 获取出发城市的数据；；element-ui；中input的带输入建议的输入框
+    getDepartCityData () {
+
+    },
+    // 获取到达城市的数据
+    getDestCityData () {
+
+    },
+    // 搜索事件
+    handleSubmit () {
+      window.console.log(1234)
+    },
+    // 出发和到达城市的切换
+    handleReverse () {
+
     }
   }
 }
