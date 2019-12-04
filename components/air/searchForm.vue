@@ -81,21 +81,57 @@ export default {
     // 获取出发城市的数据；；element-ui；中input的带输入建议的输入框;;
     getDepartCityData (value, showList) {
       // 假造数据模拟出发城市；；value==用户要输入的值；cityList回调函数；返回城市列表数据；需要要xioas请求的数据
-      const cityList = [
-        { value: '广州' },
-        { value: '深圳' },
-        { value: '北京' }
-      ]
-      showList(cityList)
+      // const cityList = [
+      //   { value: '广州' },
+      //   { value: '深圳' },
+      //   { value: '北京' }
+      // ]
+      // 发送axios请求；获取真正的搜索建议列表
+      this.$axios({
+        url: '/airs/city',
+        params: {
+          name: value
+        }
+      }).then((res) => {
+        // 将data从data对象中解构出来
+        const { data } = res.data
+        // map循环遍历；返回一个新数组
+        const cityList = data.map((element) => {
+          return {
+            ...element, // 将data数据展开
+            value: element.name// 往该对象中追加value属性
+          }
+        })
+        window.console.log(cityList)
+        showList(cityList)
+      })
     },
     // 获取到达城市的数据
     getDestCityData (value, showList) {
-      const cityList = [
-        { value: '广州' },
-        { value: '深圳' },
-        { value: '北京' }
-      ]
-      showList(cityList)
+      // 准备建议数据,然后时候 showList 回调返回到 组件当中显示
+      // const cityList = [
+      //   // 数组里面每个对象都是一条建议,其中被显示出来的数据是 value
+      //   { value: '广州' },
+      //   { value: '深圳' },
+      //   { value: '北京' }
+      // ]
+      // 发送axioe请求。获取真正的搜索列表数据
+      this.$axios({
+        url: '/airs/city',
+        params: {
+          name: value
+        }
+      }).then((res) => {
+        const { data } = res.data
+        const cityList = data.map((element) => {
+          return {
+            ...element,
+            value: element.name
+          }
+        })
+        // 准备建议数据,然后时候 showList 回调返回到 组件当中显示
+        showList(cityList)
+      })
     },
     // 搜索事件
     handleSubmit () {
