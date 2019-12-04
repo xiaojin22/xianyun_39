@@ -17,7 +17,7 @@
       <el-form-item label="出发城市">
         <!-- //带输入建议的输入框 -->
         <el-autocomplete
-          v-model="departCity"
+          v-model="form.departCity"
           :fetch-suggestions="getDepartCityData"
           class="inline-input"
           placeholder="请搜索出发城市"
@@ -27,7 +27,7 @@
       <el-form-item label="到达城市">
         <!-- //带输入建议的输入框 -->
         <el-autocomplete
-          v-model="destCity"
+          v-model="form.destCity"
           :fetch-suggestions="getDestCityData"
           class="inline-input"
           placeholder="请搜索到达城市"
@@ -78,17 +78,28 @@ export default {
     handleSearchTab (item, index) {
       // window.console.log(1234)
     },
-    // 获取出发城市的数据；；element-ui；中input的带输入建议的输入框
-    getDepartCityData () {
-
+    // 获取出发城市的数据；；element-ui；中input的带输入建议的输入框;;
+    getDepartCityData (value, showList) {
+      // 假造数据模拟出发城市；；value==用户要输入的值；cityList回调函数；返回城市列表数据；需要要xioas请求的数据
+      const cityList = [
+        { value: '广州' },
+        { value: '深圳' },
+        { value: '北京' }
+      ]
+      showList(cityList)
     },
     // 获取到达城市的数据
-    getDestCityData () {
-
+    getDestCityData (value, showList) {
+      const cityList = [
+        { value: '广州' },
+        { value: '深圳' },
+        { value: '北京' }
+      ]
+      showList(cityList)
     },
     // 搜索事件
     handleSubmit () {
-      window.console.log(1234)
+      window.console.log(this.form)
     },
     // 出发和到达城市的切换
     handleReverse () {
