@@ -19,6 +19,7 @@
         <el-autocomplete
           :fetch-suggestions="queryDepartSearch"
           @select="handleDepartSelect"
+          v-model="form.departCity"
           placeholder="请搜索出发城市"
           class="el-autocomplete"
         />
@@ -27,6 +28,7 @@
         <el-autocomplete
           :fetch-suggestions="queryDestSearch"
           @select="handleDestSelect"
+          v-model="form.destCity"
           placeholder="请搜索到达城市"
           class="el-autocomplete"
         />
@@ -35,6 +37,7 @@
         <!-- change 用户确认选择日期时触发 -->
         <el-date-picker
           @change="handleDate"
+          v-model="form. departDate"
           type="date"
           placeholder="请选择日期"
           style="width: 100%;"
@@ -61,11 +64,20 @@
 export default {
   data () {
     return {
+      // 单程和往返的tep切换
       tabs: [
         { icon: 'iconfont icondancheng', name: '单程' },
         { icon: 'iconfont iconshuangxiang', name: '往返' }
       ],
-      currentTab: 0
+      currentTab: 0,
+      // 获取要提交的城市数据
+      form: {
+        departCity: '', // 出发城市
+        departCode: '', // 出发城市代码
+        destCity: '', // 到达城市
+        destCode: '', // 到达城市代码
+        departDate: '' // 日期字符串
+      }
     }
   },
   mounted () {
@@ -79,22 +91,50 @@ export default {
 
     // 出发城市输入框获得焦点时触发
     // value 是选中的值，cb是回调函数，接收要展示的列表
-    queryDepartSearch (value, cb) {
-      cb([
-        { value: 1 },
-        { value: 2 },
-        { value: 3 }
-      ])
+    async queryDepartSearch (value, cb) {
+      const arr = await this.querySearchAsync(value)// value是用户输入（选中）的值
+      if (arr.length > 0) {
+
+      }
+      cb(arr)
     },
 
     // 目标城市输入框获得焦点时触发
     // value 是选中的值，cb是回调函数，接收要展示的列表
-    queryDestSearch (value, cb) {
-      cb([
-        { value: 1 },
-        { value: 2 },
-        { value: 3 }
-      ])
+    async queryDestSearch (value, cb) {
+      const arr = await this.querySearchAsync(value)
+      if (arr.length > 0) {
+
+      }
+      cb(arr)
+    },
+    // 查询城市接口的方法，返回promise
+    // queryString是查询关键字;；；获取城市数据；；querySearchAsync封装获取axios数据的方法
+    querySearchAsync (queryString) {
+      return new Promise((resolve, reject) => {
+        // 如果关键字是空，则直接返回
+        if (!queryString) {
+          return resolve([])
+        }
+
+        this.$axios({
+          url: `/airs/city`,
+          params: {
+            name: queryString
+          }
+        }).then((res) => {
+          const { data } = res.data
+
+          // 下拉提示列表必须要有value字段
+          const arr = data.map((v) => {
+            return {
+              ...v,
+              value: v.name.replace('市', '')
+            }
+          })
+          resolve(arr)
+        })
+      })
     },
 
     // 出发城市下拉选择时触发
