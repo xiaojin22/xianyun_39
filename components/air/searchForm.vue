@@ -15,10 +15,11 @@
     <el-form ref="form" class="search-form-content" label-width="80px">
       <!-- //出发城市 -->
       <el-form-item label="出发城市">
-        <!-- //带输入建议的输入框 -->
+        <!-- //带输入建议的输入框；；select=选中建议项；一对象 -->
         <el-autocomplete
           v-model="form.departCity"
           :fetch-suggestions="getDepartCityData"
+          @select="departSelect"
           class="inline-input"
           placeholder="请搜索出发城市"
         />
@@ -28,6 +29,7 @@
         <!-- //带输入建议的输入框 -->
         <el-autocomplete
           v-model="form.destCity"
+          @select="destSelect"
           :fetch-suggestions="getDestCityData"
           class="inline-input"
           placeholder="请搜索到达城市"
@@ -37,6 +39,7 @@
       <el-form-item label="出发时间">
         <el-date-picker
           v-model="form.departDate"
+          @change="changeDate"
           type="date"
           placeholder="选择日期"
         />
@@ -56,6 +59,7 @@
 </template>
 
 <script>
+import moment from 'moment'// 引入处理日期格式的组件
 export default {
   data () {
     return {
@@ -69,7 +73,9 @@ export default {
       form: {
         departCity: '', // 出发城市
         destCity: '', // 到达城市
-        departDate: ''// 定义日期选择器的v-model绑定的值
+        departDate: '', // 定义日期选择器的v-model绑定的值
+        departCode: '', // 出发城市代码
+        destCode: ''// 到达城市代码
       }
     }
   },
@@ -132,6 +138,19 @@ export default {
         // 准备建议数据,然后时候 showList 回调返回到 组件当中显示
         showList(cityList)
       })
+    },
+    // select事件；实现出发城市代码的选中；；item就是一个城市对象；包含城市对象所有的属性属性值
+    departSelect (item) {
+      window.console.log(item)
+      this.form.departCode = item.sort// 获取城市代码
+    },
+    // select事件；实现到达城市代码的选中
+    destSelect (item) {
+      this.form.destCode = item.sort
+    },
+    // 改变日期格式
+    changeDate () {
+      this.form.departDate = moment(this.form.departDate).format('YYYY-MM-DD')
     },
     // 搜索事件
     handleSubmit () {
