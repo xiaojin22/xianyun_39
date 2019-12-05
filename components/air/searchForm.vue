@@ -5,7 +5,7 @@
       <span
         v-for="(item, index) in tabs"
         :key="index"
-        @click="handleSearchTab(item, index)"
+        @click="handleSearchTab(index)"
         :class="{active: index === currentTab}"
       >
         <i :class="item.icon" />{{ item.name }}
@@ -86,20 +86,35 @@ export default {
   },
   methods: {
     // 实现teb切换的方法
-    handleSearchTab (item, index) {
+    handleSearchTab (index) {
+      // 不支持城市往返的提示
+      if (index === 1) {
+        this.$confirm('当前不支持往返机票搜索', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+      }
       // window.console.log(1234)
     },
     // 获取出发城市的数据；；element-ui；中input的带输入建议的输入框;;
     async getDepartCityData (value, showList) {
       // 发送axios请求；获取真正的搜索建议列表
-      const cityList = await this.getCityData(value)
+      let cityList = await this.getCityData(value)
+      // 如果列表数据长度为0；证明没结果，提示用户不支持
+      if (!cityList || cityList.length === 0) {
+        cityList = [{ value: '暂时不支持该城市' }]
+      }
+      // 为了避免用户直接输入后啥不干，直接将输入框失去焦点；可将默认城市第一个sort放在form中
+      this.form.departCode = cityList[0].sort
       showList(cityList)
     },
     // 获取到达城市的数据
     async getDestCityData (value, showList) {
-      // 准备建议数据,然后时候 showList 回调返回到 组件当中显示
       // 发送axioe请求。获取真正的搜索列表数据；；调用封装好的h函数 getCityData
       const cityList = await this.getCityData(value)
+      // 为了避免用户直接输入后啥不干，直接将输入框失去焦点；可将默认城市第一个sort放在form中
+      this.form.destCode = cityList[0].sort
       showList(cityList)
     },
     // 封装获取搜索建议列表数据
@@ -139,8 +154,14 @@ export default {
     changeDate () {
       this.form.departDate = moment(this.form.departDate).format('YYYY-MM-DD')
     },
-    // 搜索事件
+    // 点击搜索事件，实现页面的跳转
     handleSubmit () {
+      // 跳转到机票页面
+      this.$router.push({
+        path: '/air/flights',
+        // 将this.from;5个参数带过去;;;;qurey:get请求；将参数在？后面拼接，以&形式
+        query: this.form
+      })
       window.console.log(this.form)
     },
     // 出发和到达城市的切换
@@ -175,6 +196,7 @@ export default {
     box-sizing: border-box;
     border-top:3px #eee solid;
     background:#eee;
+    cursor: pointer;//鼠标为小手状态
   }
 
   .active{
