@@ -37,7 +37,20 @@
     </h2>
 
     <!-- 特价机票 -->
-    <div class="air-sale" />
+    <div class="air-sale">
+      <el-row type="flex" class="air-sale-pic" justify="space-between">
+        <el-col :span="6" v-for="(value, index) in sales" :key="index">
+          <!-- //跳转到机票列表要拼接参数 -->
+          <nuxt-link :to="`/air/flights?departCity=${value.departCity}&departCode=${value.departCode}&destCity=${value.destCity}&destCode=${value.destCode}&departDate=${value.departDate}`">
+            <img :src="value.cover">
+            <el-row class="layer-bar" type="flex" justify="space-between">
+              <span>{{ value.departCity }}-{{ value.destCity }}</span>
+              <span>￥{{ value.price }}</span>
+            </el-row>
+          </nuxt-link>
+        </el-col>
+      </el-row>
+    </div>
   </section>
 </template>
 
@@ -48,6 +61,20 @@ export default {
   // 注册
   components: {
     SearchForm
+  },
+  data () {
+    return {
+      // 假造数据，实现页面
+      sales: [{
+        cover: 'https://imgsrc.baidu.com/baike/pic/item/a71ea8d3fd1f41340d8f3dec281f95cad0c85ee3.jpg',
+        departCity: '广州',
+        departCode: 'CAN',
+        departDate: '2019-06-17',
+        destCity: '上海',
+        destCode: 'SHA',
+        price: 760
+      }]
+    }
   }
 }
 </script>
