@@ -4,25 +4,25 @@
       <!-- 显示的机票信息 -->
       <el-row type="flex" align="middle" class="flight-info">
         <el-col :span="6">
-          <span>东航 </span> MU5316
+          <span>{{ flights.airline_name }} </span> {{ flights.flight_no }}
         </el-col>
         <el-col :span="12">
           <el-row type="flex" justify="space-between" class="flight-info-center">
             <el-col :span="8" class="flight-airport">
-              <strong>20:30</strong>
-              <span>白云机场T1</span>
+              <strong>{{ flights.dep_time }}</strong>
+              <span>{{ flights.org_airport_name + flights.org_airport_quay }}</span>
             </el-col>
             <el-col :span="8" class="flight-time">
               <span>2时20分</span>
             </el-col>
             <el-col :span="8" class="flight-airport">
-              <strong>22:50</strong>
-              <span>虹桥机场T2</span>
+              <strong>{{ flights.arr_time }}</strong>
+              <span>{{ flights.dst_airport_name+flights.dst_airport_quay }}</span>
             </el-col>
           </el-row>
         </el-col>
         <el-col :span="6" class="flight-info-right">
-          ￥<span class="sell-price">810</span>起
+          ￥<span class="sell-price">{{ flights.base_price }}</span>起
         </el-col>
       </el-row>
     </div>
@@ -59,6 +59,7 @@
 <script>
 export default {
   // 接受父组件传递过来的航班列表数据
+  // eslint-disable-next-line vue/require-prop-types
   props: ['flights']
 }
 </script>
