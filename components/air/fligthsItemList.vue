@@ -13,7 +13,8 @@
               <span>{{ flights.org_airport_name + flights.org_airport_quay }}</span>
             </el-col>
             <el-col :span="8" class="flight-time">
-              <span>2时20分</span>
+              <!-- //相差时间；到达时间-出发时间 -->
+              <span>{{ rankTime }}</span>
             </el-col>
             <el-col :span="8" class="flight-airport">
               <strong>{{ flights.arr_time }}</strong>
@@ -60,7 +61,27 @@
 export default {
   // 接受父组件传递过来的航班列表数据
   // eslint-disable-next-line vue/require-prop-types
-  props: ['flights']
+  props: ['flights'],
+  // 计算属性
+  computed: {
+    // 计算出相差的时间
+    // eslint-disable-next-line vue/return-in-computed-property
+    rankTime () {
+      // 将时间转换成分钟
+      const dep = this.flights.dep_time.split(':')// 出发时间["20","30"]
+      const arr = this.flights.arr_time.split(':')// 到达时间["22","50"]
+      const depVal = dep[0] * 60 + +dep[1]// +dep[1]将字符串转换成数字类型进行计算
+      const arrVal = arr[0] * 60 + -arr[1]// 转化成分钟
+      // 用到达时间-出发时间
+      let dis = arrVal - depVal
+      // 如果dis<0;说明是第二天凌晨；所以要加24小时
+      if (dis < 0) {
+        dis = arrVal + 24 * 60 - depVal
+      }
+      // 将得到相差的时间返回Math.floor（）向下取整==22.5--22;;cill向上取整
+      return `${Math.floor(dis / 60)}时${dis % 60}分`
+    }
+  }
 }
 </script>
 
