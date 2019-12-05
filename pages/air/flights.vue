@@ -8,9 +8,8 @@
         <!-- 航班头部布局 -->
         <FlightsHeaderList />
 
-        <!-- 航班信息 -->
-
-        <FlightsItemList />
+        <!-- 航班信息 ；将获取的航班列表数据遍历后传递过去给子组件，进行遍历显示-->
+        <FlightsItemList :flights="value" v-for="(value,index) in dataList" :key="index" />
       </div>
 
       <!-- 侧边栏 -->

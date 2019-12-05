@@ -58,6 +58,8 @@
 
 <script>
 export default {
+  // 接受父组件传递过来的航班列表数据
+  props: ['flights']
 }
 </script>
 
