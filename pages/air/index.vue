@@ -65,16 +65,18 @@ export default {
   data () {
     return {
       // 假造数据，实现页面
-      sales: [{
-        cover: 'https://imgsrc.baidu.com/baike/pic/item/a71ea8d3fd1f41340d8f3dec281f95cad0c85ee3.jpg',
-        departCity: '广州',
-        departCode: 'CAN',
-        departDate: '2019-06-17',
-        destCity: '上海',
-        destCode: 'SHA',
-        price: 760
-      }]
+      sales: []
     }
+  },
+  mounted () {
+    // 发送axios请求，获取特价机票列表数据
+    this.$axios({
+      url: '/airs/sale'
+    }).then((res) => {
+      // 解构数据
+      const { data } = res.data
+      this.sales = data
+    })
   }
 }
 </script>
