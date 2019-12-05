@@ -1,6 +1,7 @@
 <template>
   <div class="flight-item">
-    <div>
+    <!-- //给机票列表添加一个开关控制展开收起， -->
+    <div @click="handleShowRecommend">
       <!-- 显示的机票信息 -->
       <el-row type="flex" align="middle" class="flight-info">
         <el-col :span="6">
@@ -27,7 +28,8 @@
         </el-col>
       </el-row>
     </div>
-    <div class="flight-recommend">
+    <!-- //默认座机信息是不展开的 showRecommend：false-->
+    <div v-if=" showRecommend" class="flight-recommend">
       <!-- 隐藏的座位信息列表 ；；对座位信息列表遍历-->
       <el-row :key="index" v-for="(item,index) in flights.seat_infos" type="flex" justify="space-between" align="middle">
         <el-col :span="4">
@@ -62,6 +64,11 @@ export default {
   // 接受父组件传递过来的航班列表数据
   // eslint-disable-next-line vue/require-prop-types
   props: ['flights'],
+  data () {
+    return {
+      showRecommend: false// 默认座位是收起的
+    }
+  },
   // 计算属性
   computed: {
     // 计算出相差的时间
@@ -80,6 +87,12 @@ export default {
       }
       // 将得到相差的时间返回Math.floor（）向下取整==22.5--22;;cill向上取整
       return `${Math.floor(dis / 60)}时${dis % 60}分`
+    }
+  },
+  methods: {
+    // 控制推荐列表的展开收起
+    handleShowRecommend () {
+      this.showRecommend = !this.showRecommend
     }
   }
 }
@@ -161,7 +174,11 @@ export default {
                 font-size: 20px;
                 color:orange;
             }
-
+            //修改选定图片按钮的颜色
+            .el-button--warning{
+                background-color: rgb(12, 144, 196);
+                border-color: rgb(12, 144, 196);
+            }
             .choose-button{
                 text-align: center;
                 color:#666;
