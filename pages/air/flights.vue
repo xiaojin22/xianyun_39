@@ -12,7 +12,11 @@
         <FlightsItemList :flights="value" v-for="(value,index) in dataList" :key="index" />
         <!-- 分页 -->
         <!--current-page;默认当前页；page-size：显示几条页 ；total：总条数 -->
-        <!--  -->
+        <!-- total 是总数据量
+          每页数据的长度应该是 page-size 属性-->
+        <!-- 选择页数的时候触发的函数 current-change 函数可以接受到一个 val 值代表我们点击的页码 -->
+        <!-- 这里 page-sizes 是我们可以选择的条目数量选项
+          选择了一个以后,就会触发 size-change事件并且将选择的数量默认人传进去-->
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -47,7 +51,7 @@ export default {
       flightsData: {}, // 航班总数据
       dataList: [], // 航班列表数据，用来循环FlightsItemList组件信息，单独出来要实现分页
       pageIndex: 1, // 当前默认第一页
-      pageSize: 3// 显示3条页
+      pageSize: 10// 显示10条页
     }
   },
   mounted () {
@@ -61,6 +65,12 @@ export default {
     }).then((res) => {
       this.flightsData = res.data// 航班总数据
       this.dataList = res.data.flights// 航班列表数据
+      // 获取页数
+      const start = (this.pageIndex - 1) * this.pageSize// 0
+      const end = start + this.pageSize
+      // 根据接口获取数据;;;;;;;
+      // 数组 slice 方法接受两个参数, 第一个是切割的开始(包括当前index), 第二个是切割的结束(不包过当前 index),
+      this.dataList = this.flightsData.flights.slice(start, end)
       window.console.log(res.data)
     })
   },
@@ -68,9 +78,23 @@ export default {
     // 触发每页多少条数的事件
     handleSizeChange (val) {
       window.console.log(`每页 ${val} 条`)
+      this.pageSize = val
+      // 获取页数
+      const start = (this.pageIndex - 1) * this.pageSize// 0
+      const end = start + this.pageSize// 10
+      // 根据接口获取数据;;;;;;;
+      // 数组 slice 方法接受两个参数, 第一个是切割的开始(包括当前index), 第二个是切割的结束(不包过当前 index),
+      this.dataList = this.flightsData.flights.slice(start, end)// 表示从数据库截取的列表数据；渲染在当前分页器中（例如pageSize当前截取10条页）
     },
     // 触发显示当前页的事件
     handleCurrentChange (val) {
+      this.pageIndex = val
+      // 获取页数
+      const start = (this.pageIndex - 1) * this.pageSize// 0
+      const end = start + this.pageSize
+      // 根据接口获取数据;;;;;;;
+      // 数组 slice 方法接受两个参数, 第一个是切割的开始(包括当前index), 第二个是切割的结束(不包过当前 index),
+      this.dataList = this.flightsData.flights.slice(start, end)
       window.console.log(`当前页: ${val}`)
     }
   }
