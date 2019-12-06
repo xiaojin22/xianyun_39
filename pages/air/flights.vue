@@ -23,7 +23,7 @@
           :current-page="pageIndex"
           :page-sizes="[5, 10, 15, 20]"
           :page-size="pageSize"
-          :total="flightsData.total"
+          :total="flightsData.flights.length"
           layout="total, sizes, prev, pager, next, jumper"
         />
       </div>
@@ -48,7 +48,9 @@ export default {
   },
   data () {
     return {
-      flightsData: {}, // 航班总数据
+      flightsData: {
+        flights: {}// 给其设置默认的空对象，由于请求是异步，防止数据未请求回来，报错
+      }, // 航班总数据
       dataList: [], // 航班列表数据，用来循环FlightsItemList组件信息，单独出来要实现分页
       pageIndex: 1, // 当前默认第一页
       pageSize: 10// 显示10条页
@@ -65,37 +67,32 @@ export default {
     }).then((res) => {
       this.flightsData = res.data// 航班总数据
       this.dataList = res.data.flights// 航班列表数据
-      // 获取页数
-      const start = (this.pageIndex - 1) * this.pageSize// 0
-      const end = start + this.pageSize
-      // 根据接口获取数据;;;;;;;
-      // 数组 slice 方法接受两个参数, 第一个是切割的开始(包括当前index), 第二个是切割的结束(不包过当前 index),
-      this.dataList = this.flightsData.flights.slice(start, end)
+      // 这里是分页, 我们需要拿到数据的开始index 和结尾的 index
+      this.loadPage()// 获取分页器的数据
       window.console.log(res.data)
     })
   },
   methods: {
-    // 触发每页多少条数的事件
-    handleSizeChange (val) {
-      window.console.log(`每页 ${val} 条`)
-      this.pageSize = val
-      // 获取页数
-      const start = (this.pageIndex - 1) * this.pageSize// 0
-      const end = start + this.pageSize// 10
-      // 根据接口获取数据;;;;;;;
-      // 数组 slice 方法接受两个参数, 第一个是切割的开始(包括当前index), 第二个是切割的结束(不包过当前 index),
-      this.dataList = this.flightsData.flights.slice(start, end)// 表示从数据库截取的列表数据；渲染在当前分页器中（例如pageSize当前截取10条页）
-    },
-    // 触发显示当前页的事件
-    handleCurrentChange (val) {
-      this.pageIndex = val
+    // 封装获取分页器的函数loadPage
+    loadPage () {
       // 获取页数
       const start = (this.pageIndex - 1) * this.pageSize// 0
       const end = start + this.pageSize
       // 根据接口获取数据;;;;;;;
       // 数组 slice 方法接受两个参数, 第一个是切割的开始(包括当前index), 第二个是切割的结束(不包过当前 index),
       this.dataList = this.flightsData.flights.slice(start, end)
-      window.console.log(`当前页: ${val}`)
+    },
+    // 触发val每页多少条数的事件
+    handleSizeChange (val) {
+      // window.console.log(`每页 ${val} 条`)
+      this.pageSize = val
+      this.loadPage()// 获取分页器的数据
+    },
+    // 触发val显示当前页的事件
+    handleCurrentChange (val) {
+      this.pageIndex = val
+      this.loadPage()// 获取分页器的数据
+      // window.console.log(`当前页: ${val}`)
     }
   }
 }
