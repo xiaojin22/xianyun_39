@@ -4,7 +4,7 @@
       <!-- 顶部过滤列表 -->
       <div class="flights-content">
         <!-- 过滤条件 -->
-
+        <!-- <FlightsFilters /> -->
         <!-- 航班头部布局 -->
         <FlightsHeaderList />
 
@@ -24,8 +24,13 @@
           :page-sizes="[5, 10, 15, 20]"
           :page-size="pageSize"
           :total="flightsData.flights.length"
+          v-if="dataList.length>0"
           layout="total, sizes, prev, pager, next, jumper"
         />
+        <!-- 进行空数据动态渲染优化 -->
+        <div v-else-if="!loading">
+          本页暂无数据
+        </div>
       </div>
 
       <!-- 侧边栏 -->
@@ -40,14 +45,17 @@
 // 引入子组件
 import FlightsHeaderList from '@/components/air/flightsHeaderList.vue'// 航班头部组件
 import FlightsItemList from '@/components/air/fligthsItemList.vue'// 航班列表组件
+// import FlightsFilters from '@/components/air/flightsFilters.vue'// 条件过滤属性组件
 export default {
   // 注册子组件
   components: {
     FlightsHeaderList,
     FlightsItemList
+    // FlightsFilters
   },
   data () {
     return {
+      loading: true,
       flightsData: {
         flights: {}// 给其设置默认的空对象，由于请求是异步，防止数据未请求回来，报错
       }, // 航班总数据
@@ -70,6 +78,7 @@ export default {
       // 这里是分页, 我们需要拿到数据的开始index 和结尾的 index
       this.loadPage()// 获取分页器的数据
       window.console.log(res.data)
+      this.loading = false
     })
   },
   methods: {
