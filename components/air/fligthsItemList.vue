@@ -28,7 +28,7 @@
         </el-col>
       </el-row>
     </div>
-    <!-- //默认座机信息是不展开的 showRecommend：false-->
+    <!-- //默认机票列表是收起的 showRecommend：false-->
     <div v-if=" showRecommend" class="flight-recommend">
       <!-- 隐藏的座位信息列表 ；；对座位信息列表遍历-->
       <el-row :key="index" v-for="(item,index) in flights.seat_infos" type="flex" justify="space-between" align="middle">
@@ -69,10 +69,9 @@ export default {
       showRecommend: false// 默认座位是收起的
     }
   },
-  // 计算属性
+  // 计算属性；可以监听触发的事件
   computed: {
     // 计算出相差的时间
-    // eslint-disable-next-line vue/return-in-computed-property
     rankTime () {
       // 将时间转换成分钟
       const dep = this.flights.dep_time.split(':')// 出发时间["20","30"]
