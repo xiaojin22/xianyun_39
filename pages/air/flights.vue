@@ -57,11 +57,25 @@ export default {
     return {
       loading: true,
       flightsData: {
-        flights: {}// 给其设置默认的空对象，由于请求是异步，防止数据未请求回来，报错
+        flights: [] // 给其设置默认的空对象，由于请求是异步，防止数据未请求回来，报错
       }, // 航班总数据
-      dataList: [], // 航班列表数据，用来循环FlightsItemList组件信息，单独出来要实现分页
+      // dataList 可以放在计算属性里面,无需每次都调用函数进行计算
+      // dataList: [], // 航班列表数据，用来循环FlightsItemList组件信息，单独出来要实现分页
       pageIndex: 1, // 当前默认第一页
       pageSize: 10// 显示10条页
+    }
+  },
+  // 计算属性监听分页器事件；；只有数据一改变，就监听数据的变化；；监听数据中数据有缓存{计算属性的好处}
+  // 取代封装数据方法中loadPage（在方法中每拿一次数据，就要刷新页面）
+  computed: {
+    dataList () {
+      // 在这里其实 return 的就是刚刚我们一直在写 loadPage()
+      // 获取页数
+      const start = (this.pageIndex - 1) * this.pageSize// 0
+      const end = start + this.pageSize
+      // 根据接口获取数据;;;;;;;
+      // 数组 slice 方法接受两个参数, 第一个是切割的开始(包括当前index), 第二个是切割的结束(不包过当前 index),
+      return this.flightsData.flights.slice(start, end)
     }
   },
   mounted () {
@@ -76,31 +90,31 @@ export default {
       this.flightsData = res.data// 航班总数据
       this.dataList = res.data.flights// 航班列表数据
       // 这里是分页, 我们需要拿到数据的开始index 和结尾的 index
-      this.loadPage()// 获取分页器的数据
+      // this.loadPage()// 获取分页器的数据
       window.console.log(res.data)
       this.loading = false
     })
   },
   methods: {
     // 封装获取分页器的函数loadPage
-    loadPage () {
-      // 获取页数
-      const start = (this.pageIndex - 1) * this.pageSize// 0
-      const end = start + this.pageSize
-      // 根据接口获取数据;;;;;;;
-      // 数组 slice 方法接受两个参数, 第一个是切割的开始(包括当前index), 第二个是切割的结束(不包过当前 index),
-      this.dataList = this.flightsData.flights.slice(start, end)
-    },
+    // loadPage () {
+    //   // 获取页数
+    //   const start = (this.pageIndex - 1) * this.pageSize// 0
+    //   const end = start + this.pageSize
+    //   // 根据接口获取数据;;;;;;;
+    //   // 数组 slice 方法接受两个参数, 第一个是切割的开始(包括当前index), 第二个是切割的结束(不包过当前 index),
+    //   this.dataList = this.flightsData.flights.slice(start, end)
+    // },
     // 触发val每页多少条数的事件
     handleSizeChange (val) {
       // window.console.log(`每页 ${val} 条`)
       this.pageSize = val
-      this.loadPage()// 获取分页器的数据
+      // this.loadPage()// 获取分页器的数据
     },
     // 触发val显示当前页的事件
     handleCurrentChange (val) {
       this.pageIndex = val
-      this.loadPage()// 获取分页器的数据
+      // this.loadPage()// 获取分页器的数据
       // window.console.log(`当前页: ${val}`)
     }
   }
