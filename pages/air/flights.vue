@@ -10,6 +10,18 @@
 
         <!-- 航班信息 ；将获取的航班列表数据遍历后传递过去给子组件，进行遍历显示-->
         <FlightsItemList :flights="value" v-for="(value,index) in dataList" :key="index" />
+        <!-- 分页 -->
+        <!--current-page;默认当前页；page-size：显示几条页 ；total：总条数 -->
+        <!--  -->
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="pageIndex"
+          :page-sizes="[5, 10, 15, 20]"
+          :page-size="pageSize"
+          :total="flightsData.total"
+          layout="total, sizes, prev, pager, next, jumper"
+        />
       </div>
 
       <!-- 侧边栏 -->
@@ -33,7 +45,9 @@ export default {
   data () {
     return {
       flightsData: {}, // 航班总数据
-      dataList: []// 航班列表数据，用来循环FlightsItemList组件信息，单独出来要实现分页
+      dataList: [], // 航班列表数据，用来循环FlightsItemList组件信息，单独出来要实现分页
+      pageIndex: 1, // 当前默认第一页
+      pageSize: 3// 显示3条页
     }
   },
   mounted () {
@@ -45,10 +59,20 @@ export default {
       url: '/airs',
       params: this.$route.query
     }).then((res) => {
-      window.console.log(res)
       this.flightsData = res.data// 航班总数据
       this.dataList = res.data.flights// 航班列表数据
+      window.console.log(res.data)
     })
+  },
+  methods: {
+    // 触发每页多少条数的事件
+    handleSizeChange (val) {
+      window.console.log(`每页 ${val} 条`)
+    },
+    // 触发显示当前页的事件
+    handleCurrentChange (val) {
+      window.console.log(`当前页: ${val}`)
+    }
   }
 }
 </script>

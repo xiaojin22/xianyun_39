@@ -79,7 +79,6 @@ export default {
       const arrTimestamp = new Date(this.flights.arr_datetime).getTime()// 到达时间戳
       const aepTimestamp = new Date(this.flights.dep_datetime).getTime()// 出发时间戳
       let duration = (arrTimestamp - aepTimestamp) // 相差的时间
-      window.console.log(duration)
       if (duration < 0) {
         // 跨过了凌晨,那么到达时间应该加上一天的毫秒数
         const day = (24 * 60 * 60 * 1000)
@@ -89,8 +88,8 @@ export default {
       const durationMinutes = duration / 1000 / 60// 转换成分钟
       const hours = Math.floor(durationMinutes / 60)
       const minutes = durationMinutes % 60
-      window.console.log(hours)
-      window.console.log(minutes)
+      // window.console.log(hours)
+      // window.console.log(minutes)
       return hours + ' 时 ' + minutes + ' 钟'
     }
   },
