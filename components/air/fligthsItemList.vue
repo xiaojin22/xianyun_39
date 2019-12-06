@@ -71,21 +71,27 @@ export default {
   },
   // 计算属性；可以监听触发的事件
   computed: {
-    // 计算出相差的时间
+    // 计算出相差的时间;;
     rankTime () {
-      // 将时间转换成分钟
-      const dep = this.flights.dep_time.split(':')// 出发时间["20","30"]
-      const arr = this.flights.arr_time.split(':')// 到达时间["22","50"]
-      const depVal = dep[0] * 60 + +dep[1]// +dep[1]将字符串转换成数字类型进行计算
-      const arrVal = arr[0] * 60 + -arr[1]// 转化成分钟
-      // 用到达时间-出发时间
-      let dis = arrVal - depVal
-      // 如果dis<0;说明是第二天凌晨；所以要加24小时
-      if (dis < 0) {
-        dis = arrVal + 24 * 60 - depVal
+    // 使用时间戳的方式
+      // 格式是:2019-12-06 00:20:00;;;先将该格式转换成时间戳，将拿来计算；最后转换成时间格式；再除以1000；
+      // var date = new Date('2019-12-06 00:20:00')；；；时间戳=date.getTime()
+      const arrTimestamp = new Date(this.flights.arr_datetime).getTime()// 到达时间戳
+      const aepTimestamp = new Date(this.flights.dep_datetime).getTime()// 出发时间戳
+      let duration = (arrTimestamp - aepTimestamp) // 相差的时间
+      window.console.log(duration)
+      if (duration < 0) {
+        // 跨过了凌晨,那么到达时间应该加上一天的毫秒数
+        const day = (24 * 60 * 60 * 1000)
+        duration = arrTimestamp + day - aepTimestamp
       }
-      // 将得到相差的时间返回Math.floor（）向下取整==22.5--22;;cill向上取整
-      return `${Math.floor(dis / 60)}时${dis % 60}分`
+      // 相差小时;;向下取整
+      const durationMinutes = duration / 1000 / 60// 转换成分钟
+      const hours = Math.floor(durationMinutes / 60)
+      const minutes = durationMinutes % 60
+      window.console.log(hours)
+      window.console.log(minutes)
+      return hours + ' 时 ' + minutes + ' 钟'
     }
   },
   methods: {
