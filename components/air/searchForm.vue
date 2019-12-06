@@ -129,7 +129,7 @@ export default {
         const citys = data.map((element) => {
           return {
             ...element,
-            value: element.name.replace('市', '')// 将数据中最后的字为市的替换掉
+            value: element.name.replace(/市$/, '')// 将数据中最后的字为市的替换掉;;用正则/市$/:/市$/g;在全局中将市给去掉
           }
         })
         // 用过滤函数将所有不带 sort 的数据去掉; // 过滤器里面,所有合法的数据应该return true
@@ -157,7 +157,7 @@ export default {
     // 点击搜索事件，实现页面的跳转
     handleSubmit () {
       // 在实现搜索跳转之前，如果用户输入市，要将市替换掉
-      this.form.departCity = this.form.departCity.replace('市', '')
+      this.form.departCity = this.form.departCity.replace(/市$/, '')
       this.form.destCity = this.form.destCity.replace('市', '')
       // 跳转到机票页面
       this.$router.push({
