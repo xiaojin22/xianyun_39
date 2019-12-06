@@ -4,7 +4,7 @@
       <!-- 顶部过滤列表 -->
       <div class="flights-content">
         <!-- 过滤条件 -->
-        <!-- <FlightsFilters /> -->
+        <FlightsFilters />
         <!-- 航班头部布局 -->
         <FlightsHeaderList />
 
@@ -45,13 +45,13 @@
 // 引入子组件
 import FlightsHeaderList from '@/components/air/flightsHeaderList.vue'// 航班头部组件
 import FlightsItemList from '@/components/air/fligthsItemList.vue'// 航班列表组件
-// import FlightsFilters from '@/components/air/flightsFilters.vue'// 条件过滤属性组件
+import FlightsFilters from '@/components/air/flightsFilters.vue'// 条件过滤属性组件
 export default {
   // 注册子组件
   components: {
     FlightsHeaderList,
     FlightsItemList
-    // FlightsFilters
+    FlightsFilters
   },
   data () {
     return {
