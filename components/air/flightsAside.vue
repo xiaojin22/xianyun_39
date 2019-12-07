@@ -22,7 +22,12 @@
 
     <div class="history">
       <h5>历史查询</h5>
-      <nuxt-link v-for="(item,index) in $store.state.history.historyList" :key="index" to="#">
+      <!-- 当单击历史记录中的选项就返回到机票列表页面；fligths；通过？拼接参数；跳转过去 -->
+      <nuxt-link
+        v-for="(item,index) in $store.state.history.historyList"
+        :key="index"
+        :to="`/air/flights?departCity=${item.departCity}&destCity=${item.destCity}&departDate=${item.departDate}&departCode=${item.departCode}&destCode=${item.destCode}`"
+      >
         <el-row
           type="flex"
           justify="space-between"
@@ -45,7 +50,9 @@
 
 <script>
 export default {
-
+  mounted () {
+    window.console.log(this.$store.state.history.historyList)// 打印数据测试
+  }
 }
 </script>
 

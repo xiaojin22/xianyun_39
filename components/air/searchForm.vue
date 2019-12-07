@@ -156,6 +156,9 @@ export default {
     },
     // 点击搜索事件，实现页面的跳转
     handleSubmit () {
+      // 将搜索的数据存储到vuex中；；作为历史记录保存；；
+      // 不能直接赋值 vuex 要使用 mutations;;;将this.form搜索的数据传递过去
+      this.$store.commit('history/addHistoryItem', this.form)
       // 在实现搜索跳转之前，如果用户输入市，要将市替换掉
       this.form.departCity = this.form.departCity.replace(/市$/, '')
       this.form.destCity = this.form.destCity.replace('市', '')
