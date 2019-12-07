@@ -90,6 +90,14 @@ export default {
     // 选择机场时候触发
     handleAirport (value) {
       // window.console.log(value)
+      const newFlightsList = this.flightsData.flights.filter((element) => {
+        if (element.org_airport_name === this.airport) {
+          return true
+        }
+      })
+      // window.console.log(newFlightsList)
+      // 将过滤得到新的机票数据传递过去给父组件；子传父；发射事件给父子件
+      this.$emit('setFlightsData', newFlightsList)
     },
 
     // 选择出发时间时候触发
@@ -104,13 +112,22 @@ export default {
           return true
         }
       })
-      window.console.log(newFlightsList)
+      // window.console.log(newFlightsList)
       // 将过滤得到新的机票数据传递过去给父组件；子传父；发射事件给父子件
       this.$emit('setFlightsData', newFlightsList)
     },
 
     // 选择机型时候触发
-    handleAirSize (value) {},
+    handleAirSize (value) {
+      const newFlightsList = this.flightsData.flights.filter((element) => {
+        if (element.plane_size === this.airSize) {
+          return true
+        }
+      })
+      // window.console.log(newFlightsList)
+      // 将过滤得到新的机票数据传递过去给父组件；子传父；发射事件给父子件
+      this.$emit('setFlightsData', newFlightsList)
+    },
 
     // 撤销条件时候触发
     handleFiltersCancel () {}
