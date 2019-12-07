@@ -101,7 +101,21 @@ export default {
     },
 
     // 选择出发时间时候触发
-    handleFlightTimes (value) {},
+    handleFlightTimes (value) {
+      // 判断出发时间
+      const newFlightsList = this.flightsData.flights.filter((element) => {
+        // 获取飞机起飞的小时；然后和选择的时间进行判断
+        const depTimesHours = +element.dep_time.split(':')[0]// [20,30]  +转换成数字类型
+        // window.console.log(depTimesHours)
+        // 由于this.flightsTimes是字符串；切割成数组，进判断，筛选
+        const form = +this.flightTimes.split(',')[0] // form的数据
+        const to = +this.flightTimes.split(',')[1]
+        return depTimesHours >= form && depTimesHours < to
+      })
+      // window.console.log(newFlightsList)
+      // 将过滤得到新的机票数据传递过去给父组件；子传父；发射事件给父子件
+      this.$emit('setFlightsData', newFlightsList)
+    },
 
     // 选择航空公司时候触发
     handleCompany (value) {
