@@ -58,8 +58,12 @@ export default {
       loading: true,
       // 航班总数据
       flightsData: {
+        options: [],
         flights: [], // 给其设置默认的空对象，由于请求是异步，防止数据未请求回来，报错
-        info: {}
+        info: {},
+        company: {},
+        fligtTimes: {},
+        airport: {}
       },
       // dataList 可以放在计算属性里面,无需每次都调用函数进行计算
       // dataList: [], // 航班列表数据，用来循环FlightsItemList组件信息，单独出来要实现分页

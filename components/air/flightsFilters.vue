@@ -7,9 +7,16 @@
         /
         {{ flightsData.info.departDate }}
       </el-col>
+      <!-- 起飞机场 -->
       <el-col :span="4">
         <el-select v-model="airport" @change="handleAirport" size="mini" placeholder="起飞机场">
-          <el-option label="白云机场" value="白云机场" />
+          <el-option
+            v-for="(item,index) in flightsData.options.airport"
+            :key="index"
+            :label="item"
+            :value="item"
+          />
+          <!-- label，是给用户看的，value，g是要传递的值 -->
         </el-select>
       </el-col>
       <el-col :span="4">
@@ -17,9 +24,15 @@
           <el-option label="00:00 - 06:00" value="1" />
         </el-select>
       </el-col>
+      <!-- 航空公司 -->
       <el-col :span="4">
         <el-select v-model="company" @change="handleCompany" size="mini" placeholder="航空公司">
-          <el-option label="厦门航空" value="厦门航空" />
+          <el-option
+            v-for="(item,index) in flightsData.options.airport"
+            :key="index"
+            :label="item"
+            :value="item"
+          />
         </el-select>
       </el-col>
       <el-col :span="4">
@@ -55,11 +68,12 @@ export default {
     }
   },
   mounted () {
-    window.console.log(this.flightsData)
   },
   methods: {
     // 选择机场时候触发
-    handleAirport (value) {},
+    handleAirport (value) {
+      window.console.log(value)
+    },
 
     // 选择出发时间时候触发
     handleFlightTimes (value) {},
