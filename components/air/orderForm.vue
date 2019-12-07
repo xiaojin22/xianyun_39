@@ -4,9 +4,10 @@
     <div class="air-column">
       <h2>剩机人</h2>
       <el-form class="member-info">
-        <div class="member-info-item">
+        <!-- 将users进行遍历 -->
+        <div v-for="(item,index) in users" :key="index" class="member-info-item">
           <el-form-item label="乘机人类型">
-            <el-input placeholder="姓名" class="input-with-select">
+            <el-input v-model="item.username" placeholder="姓名" class="input-with-select">
               <el-select slot="prepend" value="1" placeholder="请选择">
                 <el-option label="成人" value="1" />
               </el-select>
@@ -14,7 +15,7 @@
           </el-form-item>
 
           <el-form-item label="证件类型">
-            <el-input placeholder="证件号码" class="input-with-select">
+            <el-input v-model="item.id" placeholder="证件号码" class="input-with-select">
               <el-select slot="prepend" value="1" placeholder="请选择">
                 <el-option :checked="true" label="身份证" value="1" />
               </el-select>
@@ -73,9 +74,23 @@
 
 <script>
 export default {
+  data () {
+    return {
+      users: [{
+        username: '',
+        id: ''
+      }]
+    }
+  },
   methods: {
     // 添加乘机人
-    handleAddUsers () {},
+    handleAddUsers () {
+    //   this.users.push({
+    //     username: '',
+    //     id: ''
+    //   })
+      this.users = [...this.users, { username: '', id: '' }]// 第二种写法
+    },
 
     // 移除乘机人
     handleDeleteUser () {},
@@ -84,7 +99,10 @@ export default {
     handleSendCaptcha () {},
 
     // 提交订单
-    handleSubmit () {}
+    handleSubmit () {
+      // 测试添加乘机人
+      window.console.log(this.users)
+    }
   }
 }
 </script>
