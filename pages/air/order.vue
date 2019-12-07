@@ -2,8 +2,9 @@
   <div class="container">
     <el-row type="flex" justify="space-between">
       <!-- 订单表单 -->
-      <div class="main" />
-      <div>订单页</div>
+      <div class="main">
+        <OrderForm />
+      </div>
       <!-- 侧边栏 -->
       <div class="aside" />
     </el-row>
@@ -11,8 +12,11 @@
 </template>
 
 <script>
+import OrderForm from '@/components/air/orderForm.vue'// 引入订单组件
 export default {
-
+  components: {
+    OrderForm
+  }
 }
 </script>
 
