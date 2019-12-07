@@ -3,8 +3,8 @@
     <el-row type="flex" justify="space-between">
       <!-- 顶部过滤列表 -->
       <div class="flights-content">
-        <!-- 过滤条件 父传子，将航空总数据flightsData传递过去渲染页面-->
-        <FlightsFilters :flightsData="flightsData" />
+        <!-- 过滤条件 父传子，将航空总数据flightsData传递过去渲染页面  @setFlightsData接受子组件发射的事件-->
+        <FlightsFilters :flightsData="flightsData" @setFlightsData="setFlightsData" />
         <!-- 航班头部布局 -->
         <FlightsHeaderList />
 
@@ -102,6 +102,10 @@ export default {
     })
   },
   methods: {
+    // 接受子组件过滤后的新机票列表数据newFlightsList；；进行赋值；实现筛选数据
+    setFlightsData (newFlightsList) {
+      this.flightsData.flights = newFlightsList
+    },
     // 封装获取分页器的函数loadPage
     // loadPage () {
     //   // 获取页数

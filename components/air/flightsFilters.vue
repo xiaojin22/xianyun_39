@@ -96,7 +96,18 @@ export default {
     handleFlightTimes (value) {},
 
     // 选择航空公司时候触发
-    handleCompany (value) {},
+    handleCompany (value) {
+      // 使用过滤器实现筛选数据；由于value值已经双向绑定，所以不用赋值
+      window.console.log(this.flightsData.flights)
+      const newFlightsList = this.flightsData.flights.filter((element) => {
+        if (element.airline_name === this.company) {
+          return true
+        }
+      })
+      window.console.log(newFlightsList)
+      // 将过滤得到新的机票数据传递过去给父组件；子传父；发射事件给父子件
+      this.$emit('setFlightsData', newFlightsList)
+    },
 
     // 选择机型时候触发
     handleAirSize (value) {},
