@@ -35,6 +35,7 @@
 
       <!-- 侧边栏 -->
       <div class="aside">
+        <FlightsAside />
         <!-- 侧边栏组件 -->
       </div>
     </el-row>
@@ -46,12 +47,14 @@
 import FlightsHeaderList from '@/components/air/flightsHeaderList.vue'// 航班头部组件
 import FlightsItemList from '@/components/air/fligthsItemList.vue'// 航班列表组件
 import FlightsFilters from '@/components/air/flightsFilters.vue'// 条件过滤属性组件
+import FlightsAside from '@/components/air/flightsAside.vue'// 侧边栏历史记录组件
 export default {
   // 注册子组件
   components: {
     FlightsHeaderList,
     FlightsItemList,
-    FlightsFilters
+    FlightsFilters,
+    FlightsAside
   },
   data () {
     return {
