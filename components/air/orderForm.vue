@@ -21,8 +21,8 @@
               </el-select>
             </el-input>
           </el-form-item>
-
-          <span @click="handleDeleteUser()" class="delete-user">-</span>
+          <!-- 通过索引index将乘机人移除 -->
+          <span @click="handleDeleteUser(index)" class="delete-user">-</span>
         </div>
       </el-form>
 
@@ -85,15 +85,17 @@ export default {
   methods: {
     // 添加乘机人
     handleAddUsers () {
-    //   this.users.push({
-    //     username: '',
-    //     id: ''
-    //   })
+      //   this.users.push({
+      //     username: '',
+      //     id: ''
+      //   })
       this.users = [...this.users, { username: '', id: '' }]// 第二种写法
     },
 
     // 移除乘机人
-    handleDeleteUser () {},
+    handleDeleteUser (index) {
+      this.users.splice(index, 1)// 通过索引移除
+    },
 
     // 发送手机验证码
     handleSendCaptcha () {},
