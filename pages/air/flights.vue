@@ -4,7 +4,7 @@
       <!-- 顶部过滤列表 -->
       <div class="flights-content">
         <!-- 过滤条件 父传子，将航空总数据flightsData传递过去渲染页面  @setFlightsData接受子组件发射的事件-->
-        <FlightsFilters :flightsData="flightsData" @setFlightsData="setFlightsData" />
+        <FlightsFilters :flightsData="cathFlightsData" @setFlightsData="setFlightsData" />
         <!-- 航班头部布局 -->
         <FlightsHeaderList />
 
@@ -65,6 +65,14 @@ export default {
         fligtTimes: {},
         airport: {}
       },
+      cathFlightsData: {
+        options: [],
+        flights: [], // 给其设置默认的空对象，由于请求是异步，防止数据未请求回来，报错
+        info: {},
+        company: {},
+        fligtTimes: {},
+        airport: {}
+      }, // 暂存数据；为了实现过滤筛选功能
       // dataList 可以放在计算属性里面,无需每次都调用函数进行计算
       // dataList: [], // 航班列表数据，用来循环FlightsItemList组件信息，单独出来要实现分页
       pageIndex: 1, // 当前默认第一页
@@ -98,6 +106,9 @@ export default {
       // 这里是分页, 我们需要拿到数据的开始index 和结尾的 index
       // this.loadPage()// 获取分页器的数据
       window.console.log(res.data)
+      // 为了实现过滤筛选功能， 除了将原始数据放在flightsData中，还应该放在暂存数据中cathFlightsData中；
+      // this.cathFlightsData=res.data;避免数据污染，实现数据的深拷贝
+      this.cathFlightsData = { ...this.flightsData }
       this.loading = false
     })
   },

@@ -89,7 +89,7 @@ export default {
   methods: {
     // 选择机场时候触发
     handleAirport (value) {
-      window.console.log(value)
+      // window.console.log(value)
     },
 
     // 选择出发时间时候触发
@@ -98,7 +98,7 @@ export default {
     // 选择航空公司时候触发
     handleCompany (value) {
       // 使用过滤器实现筛选数据；由于value值已经双向绑定，所以不用赋值
-      window.console.log(this.flightsData.flights)
+      // window.console.log(this.flightsData.flights)
       const newFlightsList = this.flightsData.flights.filter((element) => {
         if (element.airline_name === this.company) {
           return true
