@@ -3,8 +3,8 @@
     <el-row type="flex" justify="space-between">
       <!-- 顶部过滤列表 -->
       <div class="flights-content">
-        <!-- 过滤条件 -->
-        <FlightsFilters />
+        <!-- 过滤条件 父传子，将航空总数据flightsData传递过去渲染页面-->
+        <FlightsFilters :flightsData="flightsData" />
         <!-- 航班头部布局 -->
         <FlightsHeaderList />
 
@@ -50,15 +50,17 @@ export default {
   // 注册子组件
   components: {
     FlightsHeaderList,
-    FlightsItemList
+    FlightsItemList,
     FlightsFilters
   },
   data () {
     return {
       loading: true,
+      // 航班总数据
       flightsData: {
-        flights: [] // 给其设置默认的空对象，由于请求是异步，防止数据未请求回来，报错
-      }, // 航班总数据
+        flights: [], // 给其设置默认的空对象，由于请求是异步，防止数据未请求回来，报错
+        info: {}
+      },
       // dataList 可以放在计算属性里面,无需每次都调用函数进行计算
       // dataList: [], // 航班列表数据，用来循环FlightsItemList组件信息，单独出来要实现分页
       pageIndex: 1, // 当前默认第一页
@@ -81,14 +83,14 @@ export default {
   mounted () {
     // 对于get请求的路由,两种参数分别是 params 和 query；；；分别对应
     // 对于 axios请求的两种参数分别是 data 和 params
-    window.console.log(this.$route.query)
+    // window.console.log(this.$route.query)
     // 发送axios请求，获取航班数据
     this.$axios({
       url: '/airs',
       params: this.$route.query
     }).then((res) => {
       this.flightsData = res.data// 航班总数据
-      this.dataList = res.data.flights// 航班列表数据
+      // this.dataList = res.data.flights// 航班列表数据
       // 这里是分页, 我们需要拿到数据的开始index 和结尾的 index
       // this.loadPage()// 获取分页器的数据
       window.console.log(res.data)

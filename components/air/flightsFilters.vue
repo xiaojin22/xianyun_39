@@ -3,9 +3,9 @@
     <el-row type="flex" class="filters-top" justify="space-between" align="middle">
       <el-col :span="8">
         单程：
-        广州 - 上海
+        {{ flightsData.info.departCity }} - 上海
         /
-        2019-06-17
+        {{ flightsData.info.departDate }}
       </el-col>
       <el-col :span="4">
         <el-select v-model="airport" @change="handleAirport" size="mini" placeholder="起飞机场">
@@ -39,6 +39,13 @@
 
 <script>
 export default {
+  // 接受父组件传递过来的航空总数据
+  //   props: {
+  //     // eslint-disable-next-line vue/require-default-prop
+  //     flightsData: Object
+  //   },
+  // eslint-disable-next-line vue/require-prop-types
+  props: ['flightsData'],
   data () {
     return {
       airport: '', // 机场
@@ -46,6 +53,9 @@ export default {
       company: '', // 航空公司
       airSize: '' // 机型大小
     }
+  },
+  mounted () {
+    window.console.log(this.flightsData)
   },
   methods: {
     // 选择机场时候触发
