@@ -44,7 +44,9 @@
               ￥{{ item.par_price }}
             </el-col>
             <el-col :span="3" class="choose-button">
+              <!-- //实现订单页的跳转 -->
               <el-button
+                @click="toOrderPate(item.seat_xid)"
                 type="warning"
                 size="mini"
               >
@@ -94,6 +96,16 @@ export default {
     }
   },
   methods: {
+    // 跳转到订单页；将座位id和机票id传递过去订单页
+    toOrderPate (seatXid) {
+      this.$router.push({
+        path: '/air/order',
+        query: {
+          id: this.flights.id, // 机票id'
+          seat_xid: seatXid// 座位id
+        }// 会在请求过去头部进行拼接参数
+      })
+    },
     // 控制推荐列表的展开收起
     handleShowRecommend () {
       this.showRecommend = !this.showRecommend
