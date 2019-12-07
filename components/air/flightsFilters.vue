@@ -19,25 +19,37 @@
           <!-- label，是给用户看的，value，g是要传递的值 -->
         </el-select>
       </el-col>
+      <!-- 起飞时间 -->
       <el-col :span="4">
         <el-select v-model="flightTimes" @change="handleFlightTimes" size="mini" placeholder="起飞时间">
-          <el-option label="00:00 - 06:00" value="1" />
+          <el-option
+            v-for="(item,index) in flightsData.options.flightTimes"
+            :key="index"
+            :label="`${item.from}:00 -${item.to}:00`"
+            :value="`${item.from},${item.to}`"
+          />
         </el-select>
       </el-col>
       <!-- 航空公司 -->
       <el-col :span="4">
         <el-select v-model="company" @change="handleCompany" size="mini" placeholder="航空公司">
           <el-option
-            v-for="(item,index) in flightsData.options.airport"
+            v-for="(item,index) in flightsData.options.company"
             :key="index"
             :label="item"
             :value="item"
           />
         </el-select>
       </el-col>
+      <!-- 起飞机型 -->
       <el-col :span="4">
         <el-select v-model="airSize" @change="handleAirSize" size="mini" placeholder="机型">
-          <el-option label="大" value="大" />
+          <el-option
+            v-for="(item,index) in sizeOptions"
+            :key="index"
+            :label="item.label"
+            :value="item.value"
+          />
         </el-select>
       </el-col>
     </el-row>
@@ -64,7 +76,12 @@ export default {
       airport: '', // 机场
       flightTimes: '', // 出发时间
       company: '', // 航空公司
-      airSize: '' // 机型大小
+      airSize: '', // 机型大小
+      sizeOptions: [
+        { label: '大', value: 'L' },
+        { label: '中', value: 'M' },
+        { label: '小', value: 'S' }
+      ]// 自定义飞机机型数据
     }
   },
   mounted () {
