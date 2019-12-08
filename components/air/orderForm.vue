@@ -3,7 +3,7 @@
     <!-- 添加乘机人 -->
     <div class="air-column">
       <h2>剩机人</h2>
-      <el-form :model="{users}" class="member-info">
+      <el-form :model="{users}" class="member-info" >
         <!-- 将users进行遍历 失去焦点时对乘机人进行验证规则 -->
         <div v-for="(item,index) in users" :key="index" class="member-info-item">
           <el-form-item :prop="`users[${index}].username`" :rules="{ required: true, message: '请输入姓名', trigger: 'blur'}" label="乘机人类型">
@@ -41,16 +41,16 @@
       </div>
     </div>
 
-    <!-- 联系人 -->
+    <!-- 联系人 rules验证规则-->
     <div class="air-column">
       <h2>联系人</h2>
       <div class="contact">
-        <el-form label-width="60px">
-          <el-form-item label="姓名">
+        <el-form :rules="rules" :model="{contactName,contactPhone,captcha}" label-width="80px">
+          <el-form-item label="姓名" prop="contactName">
             <el-input />
           </el-form-item>
 
-          <el-form-item label="手机">
+          <el-form-item label="手机" prop="contactPhone">
             <el-input placeholder="请输入内容">
               <template slot="append">
                 <el-button @click="handleSendCaptcha">
@@ -60,7 +60,7 @@
             </el-input>
           </el-form-item>
 
-          <el-form-item label="验证码">
+          <el-form-item label="验证码" prop="captcha">
             <el-input />
           </el-form-item>
         </el-form>
@@ -91,9 +91,16 @@ export default {
         username: '',
         id: ''
       }],
+      insurances: [], // 保险数据
+      contactName: '', // 联系人名字
+      contactPhone: '', // 联系电话
+      captcha: '', // 验证码
+      invoice: '', // 是否需要发票
       // 验证规则
       rules: {
-
+        contactName: [{ required: true, message: '请输入联系人名字', trigger: 'blur' }],
+        contactPhone: [{ required: true, message: '请输入手机号码', trigger: 'blur' }],
+        captcha: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
       }
     }
   },
