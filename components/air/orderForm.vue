@@ -13,8 +13,8 @@
               </el-select>
             </el-input>
           </el-form-item>
-
-          <el-form-item :prop="`users[${index}].id`" :rules="{ required: true, pattern:/^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/, message: '请输入身份证号码', trigger: 'blur'}" label="证件类型">
+          <!-- 身份证正则：pattern:/^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/, -->
+          <el-form-item :prop="`users[${index}].id`" :rules="{ required: true, message: '请输入身份证号码', trigger: 'blur'}" label="证件类型">
             <el-input v-model="item.id" placeholder="证件号码" class="input-with-select">
               <el-select slot="prepend" value="1" placeholder="请选择">
                 <el-option :checked="true" label="身份证" value="1" />
@@ -35,11 +35,20 @@
     <div class="air-column">
       <h2>保险</h2>
       <div>
-        <el-checkbox-group v-model="insurances" @change="handeleInsurances">
-          <!-- 绑定一个change事件； -->
-          <div v-for="(item,index) in data.insurances" :key="index" class="insurance-item">
-            <el-checkbox :label="item.id" border>
-              {{ `${item.type}：￥${item.price}/份×1  最高赔付${item.compensation}` }}
+        <el-checkbox-group v-model="insurances">
+          <div v-for="(item, index) in data.insurances" :key="index" class="insurance-item">
+            <!-- select option 当中
+            label 是给用户看的
+            value 给计算机看的
+
+            checkbox-group 当中
+            label 才是给计算机看的
+            给用户看的文字可以直接卸载 checkbox 标签之间-->
+            <el-checkbox
+              :label="item.id"
+              border
+            >
+              {{ item.type }}：￥{{ item.price }}/份×1 最高赔付{{ item.compensation }}
             </el-checkbox>
           </div>
         </el-checkbox-group>
@@ -109,6 +118,7 @@ export default {
     }
   },
   mounted () {
+    window.console.log(this.data)
   },
   methods: {
     // 保险事件;触发change事件
@@ -155,8 +165,8 @@ export default {
         method: 'POST',
         data: { tel: this.contactPhone }// 获取验证码
       }).then((res) => {
-        const { code } = res.data
-        window.console.log(res)
+        const { code } = res.data// 获取模拟的手机验证码
+        this.captcha = code
         this.$confirm(`模拟手机验证码：${code}`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: false,
@@ -164,19 +174,34 @@ export default {
         })
       })
     },
-
+    //
     // 提交订单
     handleSubmit () {
       // 测试添加乘机人
       // window.console.log(this.users)
       // 获取提交订单的数据,发送axios请求
-      // const orderData = {
-      //   insurances: this.data.insurances, // 保险数据
-      //   users: this.users, // 用户列表
-      //   contactName: this.contactName // 联系人名字
-
-      // }
-      window.console.log(this.contactPhone)
+      const orderData = {
+        insurances: this.insurances, // 保险数据
+        users: this.users, // 用户列表
+        contactName: this.contactName, // 联系人名字
+        captcha: this.captcha, // 手机验证码
+        seat_xid: this.$route.query.seat_xid, // 座位id
+        air: this.data.id, // 航班id
+        contactPhone: this.contactPhone, // 手机号
+        invoice: false // 发票
+      }
+      const token = this.$store.state.user.userInfo.token// 获取用户的token值
+      // 发送axios请求，提交订单
+      this.$axios({
+        url: '/airorders',
+        method: 'POST',
+        data: orderData,
+        headers: {
+          Authorization: 'Bearer ' + token
+        }// 请求体
+      }).then((res) => {
+        window.console.log(res)
+      })
     }
   }
 }
