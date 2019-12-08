@@ -37,7 +37,7 @@ export default {
       }
     }).then((res) => {
       window.console.log(res.data)
-      this.flightsData = res.data// 获取机票详情数据；传递过去给子组件orderForm
+      this.flightsData = res.data// 获取机票详情数据；传递过去给子组件orderForm;;data就是机票数据
     })
   }
 }

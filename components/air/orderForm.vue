@@ -3,8 +3,8 @@
     <!-- 添加乘机人 -->
     <div class="air-column">
       <h2>剩机人</h2>
-      <el-form :model="{users}" class="member-info" >
-        <!-- 将users进行遍历 失去焦点时对乘机人进行验证规则 -->
+      <el-form :model="{users}" class="member-info">
+        <!-- 将users进行遍历 失去焦点时对乘机人进行验证规则 pattern:正则判断-->
         <div v-for="(item,index) in users" :key="index" class="member-info-item">
           <el-form-item :prop="`users[${index}].username`" :rules="{ required: true, message: '请输入姓名', trigger: 'blur'}" label="乘机人类型">
             <el-input v-model="item.username" placeholder="姓名" class="input-with-select">
@@ -14,7 +14,7 @@
             </el-input>
           </el-form-item>
 
-          <el-form-item :prop="`users[${index}].id`" :rules="{ required: true, message: '请输入身份证号码', trigger: 'blur'}" label="证件类型">
+          <el-form-item :prop="`users[${index}].id`" :rules="{ required: true, pattern:/^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/, message: '请输入身份证号码', trigger: 'blur'}" label="证件类型">
             <el-input v-model="item.id" placeholder="证件号码" class="input-with-select">
               <el-select slot="prepend" value="1" placeholder="请选择">
                 <el-option :checked="true" label="身份证" value="1" />
@@ -34,10 +34,15 @@
     <!-- 保险 -->
     <div class="air-column">
       <h2>保险</h2>
-      <div v-for="(item,index) in data.insurances" :key="index">
-        <div class="insurance-item">
-          <el-checkbox :label="`${item.type}：￥${item.price}/份×1  最高赔付${item.compensation}`" border />
-        </div>
+      <div>
+        <el-checkbox-group v-model="insurances" @change="handeleInsurances">
+          <!-- 绑定一个change事件； -->
+          <div v-for="(item,index) in data.insurances" :key="index" class="insurance-item">
+            <el-checkbox :label="item.id" border>
+              {{ `${item.type}：￥${item.price}/份×1  最高赔付${item.compensation}` }}
+            </el-checkbox>
+          </div>
+        </el-checkbox-group>
       </div>
     </div>
 
@@ -47,11 +52,11 @@
       <div class="contact">
         <el-form :rules="rules" :model="{contactName,contactPhone,captcha}" label-width="80px">
           <el-form-item label="姓名" prop="contactName">
-            <el-input />
+            <el-input v-model="contactName" placeholder="请输入姓名" />
           </el-form-item>
 
           <el-form-item label="手机" prop="contactPhone">
-            <el-input placeholder="请输入内容">
+            <el-input v-model="contactPhone" placeholder="请输入手机号">
               <template slot="append">
                 <el-button @click="handleSendCaptcha">
                   发送验证码
@@ -61,7 +66,7 @@
           </el-form-item>
 
           <el-form-item label="验证码" prop="captcha">
-            <el-input />
+            <el-input v-model="captcha" placeholder="验证码" />
           </el-form-item>
         </el-form>
         <el-button @click="handleSubmit" type="warning" class="submit">
@@ -95,7 +100,6 @@ export default {
       contactName: '', // 联系人名字
       contactPhone: '', // 联系电话
       captcha: '', // 验证码
-      invoice: '', // 是否需要发票
       // 验证规则
       rules: {
         contactName: [{ required: true, message: '请输入联系人名字', trigger: 'blur' }],
@@ -104,7 +108,21 @@ export default {
       }
     }
   },
+  mounted () {
+  },
   methods: {
+    // 保险事件;触发change事件
+    handeleInsurances () {
+      window.console.log(this.insurances)
+      // // 获取保险数据
+      // this.insurances.forEach((id) => {
+      //   this.data.insurances.forEach((item) => {
+      //     if (id === item.id) {
+
+      //     }
+      //   })
+      // })
+    },
     // 添加乘机人
     handleAddUsers () {
       //   this.users.push({
@@ -120,12 +138,32 @@ export default {
     },
 
     // 发送手机验证码
-    handleSendCaptcha () {},
+    handleSendCaptcha () {
+      // 判断用户输入手机号长度
+      // if(this.contactPhone)
+      const tel = /^1(3[0-9]|5[189]|8[6789])[0-9]{8}$/// 手机号正则验证
+      if (!tel.test(this.contactPhone)) {
+        // 不符合正则;提示错误信息
+        this.$message({
+          message: '手机号不符合规则',
+          type: 'warning'
+        })
+        return false
+      }
+    },
 
     // 提交订单
     handleSubmit () {
       // 测试添加乘机人
-      window.console.log(this.users)
+      // window.console.log(this.users)
+      // 获取提交订单的数据,发送axios请求
+      // const orderData = {
+      //   insurances: this.data.insurances, // 保险数据
+      //   users: this.users, // 用户列表
+      //   contactName: this.contactName // 联系人名字
+
+      // }
+      window.console.log(this.contactPhone)
     }
   }
 }
