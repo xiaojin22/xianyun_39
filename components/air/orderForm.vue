@@ -34,9 +34,9 @@
     <!-- 保险 -->
     <div class="air-column">
       <h2>保险</h2>
-      <div>
+      <div v-for="(item,index) in data.insurances" :key="index">
         <div class="insurance-item">
-          <el-checkbox label="航空意外险：￥30/份×1  最高赔付260万" border />
+          <el-checkbox :label="`${item.type}：￥${item.price}/份×1  最高赔付${item.compensation}`" border />
         </div>
       </div>
     </div>
@@ -74,12 +74,23 @@
 
 <script>
 export default {
+  // 接受父组件order传递过来的数据;;接受机票详情数据
+  // eslint-disable-next-line vue/require-prop-types
+  props: ['data'],
+  // props: {
+  //   // 接受机票数据
+  //   data: {
+  //     type: Object,
+  //     default: {}
+  //   }
+  // },
   data () {
     return {
       users: [{
         username: '',
         id: ''
       }]
+      // insurances: []// 保险数据
     }
   },
   methods: {
