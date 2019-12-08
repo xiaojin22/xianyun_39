@@ -148,8 +148,21 @@ export default {
           message: '手机号不符合规则',
           type: 'warning'
         })
-        return false
+        return
       }
+      this.$axios({
+        url: '/captchas',
+        method: 'POST',
+        data: { tel: this.contactPhone }// 获取验证码
+      }).then((res) => {
+        const { code } = res.data
+        window.console.log(res)
+        this.$confirm(`模拟手机验证码：${code}`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: false,
+          type: 'warning'
+        })
+      })
     },
 
     // 提交订单
