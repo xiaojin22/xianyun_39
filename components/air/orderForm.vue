@@ -3,10 +3,10 @@
     <!-- 添加乘机人 -->
     <div class="air-column">
       <h2>剩机人</h2>
-      <el-form class="member-info">
-        <!-- 将users进行遍历 -->
+      <el-form :model="{users}" class="member-info">
+        <!-- 将users进行遍历 失去焦点时对乘机人进行验证规则 -->
         <div v-for="(item,index) in users" :key="index" class="member-info-item">
-          <el-form-item label="乘机人类型">
+          <el-form-item :prop="`users[${index}].username`" :rules="{ required: true, message: '请输入姓名', trigger: 'blur'}" label="乘机人类型">
             <el-input v-model="item.username" placeholder="姓名" class="input-with-select">
               <el-select slot="prepend" value="1" placeholder="请选择">
                 <el-option label="成人" value="1" />
@@ -14,7 +14,7 @@
             </el-input>
           </el-form-item>
 
-          <el-form-item label="证件类型">
+          <el-form-item :prop="`users[${index}].id`" :rules="{ required: true, message: '请输入身份证号码', trigger: 'blur'}" label="证件类型">
             <el-input v-model="item.id" placeholder="证件号码" class="input-with-select">
               <el-select slot="prepend" value="1" placeholder="请选择">
                 <el-option :checked="true" label="身份证" value="1" />
@@ -86,11 +86,15 @@ export default {
   // },
   data () {
     return {
+      // 乘机人数据
       users: [{
         username: '',
         id: ''
-      }]
-      // insurances: []// 保险数据
+      }],
+      // 验证规则
+      rules: {
+
+      }
     }
   },
   methods: {
@@ -144,9 +148,9 @@ export default {
 .input-with-select /deep/ .el-input-group__prepend {
   background-color: #fff;
 }
-.member-info /deep/ .el-form-item {
-  margin-bottom: 0;
-}
+// .member-info /deep/ .el-form-item {
+//   margin-bottom: 0;
+// }
 
 .member-info-item {
   border-bottom: 1px #eee dashed;
