@@ -191,6 +191,21 @@ export default {
         invoice: false // 发票
       }
       const token = this.$store.state.user.userInfo.token// 获取用户的token值
+      // 判断用户有没有登录，如果没登录，则跳转到登录页面
+      if (!token) {
+        this.$confirm(`请先登录`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: false,
+          type: 'warning'
+        })
+        // 秒后跳转到登录页面
+        setTimeout(() => {
+          this.$router.push({
+            path: '/user/login'
+          })
+        }, 2500)
+        return
+      }
       // 发送axios请求，提交订单
       this.$axios({
         url: '/airorders',
@@ -201,6 +216,14 @@ export default {
         }// 请求体
       }).then((res) => {
         window.console.log(res)
+      }).catch((err) => {
+        // 错误。提示用户
+        const { message } = err.response.data
+        this.$confirm(`${message}`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: false,
+          type: 'warning'
+        })
       })
     }
   }
