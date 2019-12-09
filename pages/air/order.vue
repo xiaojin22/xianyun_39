@@ -5,9 +5,9 @@
       <div class="main">
         <OrderForm :data="flightsData" />
       </div>
-      <!-- 侧边栏 -->
+      <!-- 侧边栏 父传子，将机票数据传递过去 -->
       <div class="aside">
-        <OrderAside />
+        <OrderAside :data="flightsData" />
       </div>
     </el-row>
   </div>

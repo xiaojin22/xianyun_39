@@ -2,8 +2,8 @@
   <div class="aside">
     <div class="air-info">
       <el-row type="flex" justify="space-between" class="info-top">
-        <div>2019-04-15</div>
-        <div>广州 - 上海</div>
+        <div>{{ data.dep_date }}</div>
+        <div>{{ data.org_city_name }} - {{ data.dst_city_name }}</div>
       </el-row>
       <el-row
         type="flex"
@@ -12,16 +12,16 @@
         class="info-step"
       >
         <el-col :span="5" class="flight-airport">
-          <strong>20:30</strong>
-          <span>白云机场</span>
+          <strong>{{ data.dep_time }}</strong>
+          <span>{{ data.org_airport_name }}{{ data.org_airport_quay }}</span>
         </el-col>
         <el-col :span="14" class="flight-time">
           <span>--- 2时20分 ---</span>
-          <span>东航</span>
+          <span>{{ data.airline_name }}</span>
         </el-col>
         <el-col :span="5" class="flight-airport">
-          <strong>22:50</strong>
-          <span>浦东机场T2</span>
+          <strong>{{ data.arr_time }}</strong>
+          <span>{{ data.dst_airport_name }}{{ data.dst_airport_quay }}</span>
         </el-col>
       </el-row>
     </div>
@@ -49,35 +49,16 @@
 
 <script>
 export default {
-//   props: {
-//     data: {
-//       type: Object,
-//       default: {}
-//     }
-//   },
-
-  computed: {
-    rankTime () {
-      // 数据还未请求回来
-      if (!this.data.dep_time) { return '' }
-
-      // 转化为分钟
-      const dep = this.data.dep_time.split(':')
-      const arr = this.data.arr_time.split(':')
-      const depVal = dep[0] * 60 + +dep[1]
-      const arrVal = arr[0] * 60 + +arr[1]
-
-      // 到达时间相减得到分钟
-      let dis = arrVal - depVal
-
-      // 如果是第二天凌晨时间段，需要加24小时
-      if (dis < 0) {
-        dis = arrVal + 24 * 60 - depVal
-      }
-
-      // 得到相差时间
-      return `${Math.floor(dis / 60)}时${dis % 60}分`
+  // 接受父组件传递过来的机票数据
+  props: {
+    data: {
+      type: Object,
+      // eslint-disable-next-line vue/require-valid-default-prop
+      default: {}
     }
+  },
+  computed: {
+
   }
 }
 </script>
