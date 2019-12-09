@@ -262,6 +262,12 @@ export default {
       })
         .then((res) => {
           window.console.log(res)
+          // 提交订单,将订单id带过去，跳转到支付页
+          const { id } = res.data.data
+          this.$router.push({
+            path: '/air/pay',
+            query: { id }// 对象。将id在地址栏中带过去
+          })
         })
         .catch((err) => {
           // 错误。提示用户
