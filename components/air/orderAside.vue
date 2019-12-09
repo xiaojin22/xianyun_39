@@ -33,16 +33,17 @@
     <el-row type="flex" justify="space-between" class="info-bar">
       <span>成人机票</span>
       <span>￥1345</span>
-      <span>x1</span>
+      <span>x{{ asideData.numUsers }}</span>
     </el-row>
     <el-row type="flex" justify="space-between" class="info-bar">
       <span>机建＋燃油</span>
       <span>¥50/人/单程</span>
-      <span>x1</span>
+      <span>x{{ asideData.numUsers }}</span>
     </el-row>
     <el-row type="flex" justify="space-between" align="middle" class="info-bar">
       <span>应付总额：</span>
-      <span class="price">￥{{ allPrice }} </span>
+      <!-- 将订单总价格渲染 -->
+      <span class="price">￥{{ asideData.allPrice }} </span>
     </el-row>
   </div>
 </template>
@@ -56,8 +57,9 @@ export default {
       // eslint-disable-next-line vue/require-valid-default-prop
       default: {}
     },
-    allPrice: {
-      type: Number,
+    // 接受父组件传递过来的订单总价格和乘机人数
+    asideData: {
+      type: Object,
       // eslint-disable-next-line vue/require-valid-default-prop
       default: {}
     }

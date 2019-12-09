@@ -156,7 +156,10 @@ export default {
       // 机建；燃油价格
       flightsPrice += this.data.airport_tax_audlet * this.users.length
       // 将机票价格传递给父组件，再传递给兄弟组件
-      this.$emit('changePrice', flightsPrice)
+      this.$emit('changePrice', {
+        allPrice: flightsPrice, // 订单总价格
+        numUsers: this.users.length// 乘机人数
+      })
       return flightsPrice
     }
   },

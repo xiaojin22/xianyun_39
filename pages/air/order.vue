@@ -5,9 +5,9 @@
       <div class="main">
         <OrderForm :data="flightsData" @changePrice="setPrice" />
       </div>
-      <!-- 侧边栏 父传子，将机票数据传递过去 -->
+      <!-- 侧边栏 父传子，将机票数据和乘机人数传递过去 -->
       <div class="aside">
-        <OrderAside :data="flightsData" :allPrice="allPrice" />
+        <OrderAside :data="flightsData" :asideData="asideData" />
       </div>
     </el-row>
   </div>
@@ -27,7 +27,10 @@ export default {
       flightsData: {
         insurances: []// 默认给一个空数组，防止异步请求还没数据，报错
       },
-      allPrice: 1000// 订单价格
+      asideData: {
+        allPrice: 0, // 订单总价格
+        numUsers: 1// 乘机人数
+      }
     }
   },
   // 使用watch监听父组件传递过来的价格变化
@@ -48,9 +51,9 @@ export default {
   },
   methods: {
     // 接受表单组件传递过来订单价格存到本身的data 当中；
-    setPrice (newPrice) {
+    setPrice (asideData) {
       window.console.log('价格改变了')
-      this.allPrice = newPrice
+      this.asideData = asideData// 包订单价格和乘机人数
     }
   }
 }
