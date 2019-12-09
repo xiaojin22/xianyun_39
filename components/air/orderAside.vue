@@ -16,7 +16,7 @@
           <span>{{ data.org_airport_name }}{{ data.org_airport_quay }}</span>
         </el-col>
         <el-col :span="14" class="flight-time">
-          <span>--- 2时20分 ---</span>
+          <span>--- {{ rankTime }} ---</span>
           <span>{{ data.airline_name }}</span>
         </el-col>
         <el-col :span="5" class="flight-airport">
@@ -58,7 +58,25 @@ export default {
     }
   },
   computed: {
-
+    // 使用时间戳计算出发时间和到达时间的时间差
+    // eslint-disable-next-line vue/return-in-computed-property
+    rankTime () {
+      // 将时间格式转换成时间戳格式；分钟
+      const depMinutes = new Date(this.data.dep_datetime).getTime()// 出发时间戳分钟
+      const arrMinutes = new Date(this.data.arr_datetime).getTime()// 到达时间戳
+      // 相差的时间戳
+      let durations = (arrMinutes - depMinutes)
+      // 判断；如果过了凌晨就是相差一天，24小时
+      if (durations < 0) {
+        const dayTime = 24 * 60 * 60 * 1000
+        durations = arrMinutes + dayTime - depMinutes
+      }
+      // 相差的分钟
+      const durationsMinutes = durations / 1000 / 60// 相差的所有分钟
+      const durationsHours = Math.floor(durationsMinutes / 60)// 相差小时；向下取整
+      const durMinutes = durationsMinutes % 60// 相差分钟
+      return `${durationsHours}时${durMinutes}分`
+    }
   }
 }
 </script>
