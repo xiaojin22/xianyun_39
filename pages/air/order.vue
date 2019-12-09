@@ -1,9 +1,9 @@
 <template>
   <div class="container">
     <el-row type="flex" justify="space-between">
-      <!-- 订单表单 父传子，将机票数据传递过去-->
+      <!-- 订单表单 父传子，将机票数据传递过去;;;接受表单传递过来的订单价格-->
       <div class="main">
-        <OrderForm :data="flightsData" />
+        <OrderForm :data="flightsData" @changePrice="setPrice" />
       </div>
       <!-- 侧边栏 父传子，将机票数据传递过去 -->
       <div class="aside">
@@ -30,6 +30,7 @@ export default {
       allPrice: 1000// 订单价格
     }
   },
+  // 使用watch监听父组件传递过来的价格变化
   mounted () {
     // 获取订单发送过来的机票id和座位id请求保险数据，传递给表单子组件渲染
     window.console.log(this.$route.query)
@@ -44,6 +45,13 @@ export default {
       window.console.log(res.data)
       this.flightsData = res.data// 获取机票详情数据；传递过去给子组件orderForm;;data就是机票数据
     })
+  },
+  methods: {
+    // 接受表单组件传递过来订单价格存到本身的data 当中；
+    setPrice (newPrice) {
+      window.console.log('价格改变了')
+      this.allPrice = newPrice
+    }
   }
 }
 </script>

@@ -6,7 +6,11 @@
       <el-form :model="{users}" class="member-info">
         <!-- 将users进行遍历 失去焦点时对乘机人进行验证规则 pattern:正则判断-->
         <div v-for="(item,index) in users" :key="index" class="member-info-item">
-          <el-form-item :prop="`users[${index}].username`" :rules="{ required: true, message: '请输入姓名', trigger: 'blur'}" label="乘机人类型">
+          <el-form-item
+            :prop="`users[${index}].username`"
+            :rules="{ required: true, message: '请输入姓名', trigger: 'blur'}"
+            label="乘机人类型"
+          >
             <el-input v-model="item.username" placeholder="姓名" class="input-with-select">
               <el-select slot="prepend" value="1" placeholder="请选择">
                 <el-option label="成人" value="1" />
@@ -14,7 +18,11 @@
             </el-input>
           </el-form-item>
           <!-- 身份证正则：pattern:/^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/, -->
-          <el-form-item :prop="`users[${index}].id`" :rules="{ required: true, message: '请输入身份证号码', trigger: 'blur'}" label="证件类型">
+          <el-form-item
+            :prop="`users[${index}].id`"
+            :rules="{ required: true, message: '请输入身份证号码', trigger: 'blur'}"
+            label="证件类型"
+          >
             <el-input v-model="item.id" placeholder="证件号码" class="input-with-select">
               <el-select slot="prepend" value="1" placeholder="请选择">
                 <el-option :checked="true" label="身份证" value="1" />
@@ -81,6 +89,8 @@
         <el-button @click="handleSubmit" type="warning" class="submit">
           提交订单
         </el-button>
+        <!-- 单击提交订单时，显示订单总价格 -->
+        <span v-show="false">{{ allPrice }}</span>
       </div>
     </div>
   </div>
@@ -116,6 +126,18 @@ export default {
         captcha: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
       }
     }
+  },
+  // 计算订单总价格；使用计算属性监听；要将数据return出去
+  computed: {
+    // 会监听所有被引用过的数据，每次触发就计算出一个新价格；将数据传递给传递；其实是兄弟组件传递递；父组件为桥梁
+    // 机票价格；根据乘机人多少
+    allPrice () {
+      const flightsPrice = this.data.base_price * this.users.length
+      // 将机票价格传递给父组件，再传递给兄弟组件
+      this.$emit('changePrice', flightsPrice)
+      return flightsPrice
+    }
+
   },
   mounted () {
     window.console.log(this.data)
@@ -174,7 +196,6 @@ export default {
         })
       })
     },
-    //
     // 提交订单
     handleSubmit () {
       // 测试添加乘机人
