@@ -6,16 +6,20 @@
         <OrderForm :data="flightsData" />
       </div>
       <!-- 侧边栏 -->
-      <div class="aside" />
+      <div class="aside">
+        <OrderAside />
+      </div>
     </el-row>
   </div>
 </template>
 
 <script>
 import OrderForm from '@/components/air/orderForm.vue'// 引入订单组件
+import OrderAside from '@/components/air/orderAside'// 引入侧边栏总价格组件
 export default {
   components: {
-    OrderForm
+    OrderForm,
+    OrderAside
   },
   data () {
     return {
