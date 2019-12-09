@@ -111,18 +111,24 @@ export default {
   data () {
     return {
       // 乘机人数据
-      users: [{
-        username: '',
-        id: ''
-      }],
+      users: [
+        {
+          username: '',
+          id: ''
+        }
+      ],
       insurances: [], // 保险数据
       contactName: '', // 联系人名字
       contactPhone: '', // 联系电话
       captcha: '', // 验证码
       // 验证规则
       rules: {
-        contactName: [{ required: true, message: '请输入联系人名字', trigger: 'blur' }],
-        contactPhone: [{ required: true, message: '请输入手机号码', trigger: 'blur' }],
+        contactName: [
+          { required: true, message: '请输入联系人名字', trigger: 'blur' }
+        ],
+        contactPhone: [
+          { required: true, message: '请输入手机号码', trigger: 'blur' }
+        ],
         captcha: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
       }
     }
@@ -130,14 +136,29 @@ export default {
   // 计算订单总价格；使用计算属性监听；要将数据return出去
   computed: {
     // 会监听所有被引用过的数据，每次触发就计算出一个新价格；将数据传递给传递；其实是兄弟组件传递递；父组件为桥梁
-    // 机票价格；根据乘机人多少
     allPrice () {
-      const flightsPrice = this.data.base_price * this.users.length
+      // 订单总价格；；；this.users.length乘机人的人数
+      let flightsPrice = 0
+      // 机票价格
+      flightsPrice += (this.data.base_price * this.users.length)
+      // 保险价格
+      this.insurances.forEach((id) => {
+        // [1,2,666]；； // 这里面遍历的是选中的 保险id
+        // 要在这个寻找跟这个 id 一致的对象,获取价格加到总价当中
+        this.data.insurances.forEach((item) => {
+          // 我们的所有保险数据都在  // this.data.insurances;
+          if (id === item.id) {
+            // 如果这个对象的 id 等于我们选中的 id；// 就要将这个价格加入总价当中
+            flightsPrice += item.price * this.users.length
+          }
+        })
+      })
+      // 机建；燃油价格
+      flightsPrice += this.data.airport_tax_audlet * this.users.length
       // 将机票价格传递给父组件，再传递给兄弟组件
       this.$emit('changePrice', flightsPrice)
       return flightsPrice
     }
-
   },
   mounted () {
     window.console.log(this.data)
@@ -161,19 +182,19 @@ export default {
       //     username: '',
       //     id: ''
       //   })
-      this.users = [...this.users, { username: '', id: '' }]// 第二种写法
+      this.users = [...this.users, { username: '', id: '' }] // 第二种写法
     },
 
     // 移除乘机人
     handleDeleteUser (index) {
-      this.users.splice(index, 1)// 通过索引移除
+      this.users.splice(index, 1) // 通过索引移除
     },
 
     // 发送手机验证码
     handleSendCaptcha () {
       // 判断用户输入手机号长度
       // if(this.contactPhone)
-      const tel = /^1(3[0-9]|5[189]|8[6789])[0-9]{8}$/// 手机号正则验证
+      const tel = /^1(3[0-9]|5[189]|8[6789])[0-9]{8}$/ // 手机号正则验证
       if (!tel.test(this.contactPhone)) {
         // 不符合正则;提示错误信息
         this.$message({
@@ -185,9 +206,9 @@ export default {
       this.$axios({
         url: '/captchas',
         method: 'POST',
-        data: { tel: this.contactPhone }// 获取验证码
+        data: { tel: this.contactPhone } // 获取验证码
       }).then((res) => {
-        const { code } = res.data// 获取模拟的手机验证码
+        const { code } = res.data // 获取模拟的手机验证码
         this.captcha = code
         this.$confirm(`模拟手机验证码：${code}`, '提示', {
           confirmButtonText: '确定',
@@ -211,7 +232,7 @@ export default {
         contactPhone: this.contactPhone, // 手机号
         invoice: false // 发票
       }
-      const token = this.$store.state.user.userInfo.token// 获取用户的token值
+      const token = this.$store.state.user.userInfo.token // 获取用户的token值
       // 判断用户有没有登录，如果没登录，则跳转到登录页面
       if (!token) {
         this.$confirm(`请先登录`, '提示', {
@@ -234,18 +255,20 @@ export default {
         data: orderData,
         headers: {
           Authorization: 'Bearer ' + token
-        }// 请求体
-      }).then((res) => {
-        window.console.log(res)
-      }).catch((err) => {
-        // 错误。提示用户
-        const { message } = err.response.data
-        this.$confirm(`${message}`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: false,
-          type: 'warning'
-        })
+        } // 请求体
       })
+        .then((res) => {
+          window.console.log(res)
+        })
+        .catch((err) => {
+          // 错误。提示用户
+          const { message } = err.response.data
+          this.$confirm(`${message}`, '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: false,
+            type: 'warning'
+          })
+        })
     }
   }
 }
