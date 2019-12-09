@@ -7,7 +7,7 @@
       </div>
       <!-- 侧边栏 父传子，将机票数据传递过去 -->
       <div class="aside">
-        <OrderAside :data="flightsData" />
+        <OrderAside :data="flightsData" :allPrice="allPrice" />
       </div>
     </el-row>
   </div>
@@ -26,7 +26,8 @@ export default {
       // 机票详情数据
       flightsData: {
         insurances: []// 默认给一个空数组，防止异步请求还没数据，报错
-      }
+      },
+      allPrice: 1000// 订单价格
     }
   },
   mounted () {
