@@ -33,7 +33,8 @@ export default {
   data () {
     return {
       // 订单详情
-      allData: {}
+      allData: {},
+      Timer: null// 清除轮询
     }
   },
   // 页面一刷新，就没有token值，所以要监听token的变化
@@ -51,6 +52,12 @@ export default {
     if (this.$store.state.user.userInfo.token) {
       this.loadData()
     }
+  },
+  destroyed () {
+    // 这是组件被销毁的声明周期钩子函数
+    // 如果使用了setInterval，在这里使用清理定时器
+    window.console.log('支付页面被跳出，应该清理定时器，不再监控支付状态')
+    clearInterval(this.Timer)
   },
   methods: {
     // 轮询订单支付的状态
@@ -73,10 +80,10 @@ export default {
         // 未支付
         if (res.data.trade_state === 'NOTPAY') {
           // 等待支付，不断轮询;;间隔一秒就询问一次，直到订单状态支付成功
-          setTimeout(() => {
+          this.Timer = setTimeout(() => {
             // 自调用自己，询问订单支付情况
             this.checkPayStatus()
-          }, 1000)
+          }, 1000)// 页面跳出，清除轮询
         } else {
           // 一直到状态的不再是 等待支付,
           // 要么成功要么失败, 不管是什么我都把后台传回来的状态文字 打印出来 this.$message
