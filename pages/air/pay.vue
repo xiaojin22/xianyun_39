@@ -38,8 +38,9 @@ export default {
   },
   // 页面一刷新，就没有token值，所以要监听token的变化
   watch: {
-    'this.$store.state.user.userInfo.token' () {
+    '$store.state.user.userInfo.token' () {
       // 封装页面一刷新就报没有token的错误
+      window.console.log(123)
       this.loadData()
     }
   },
@@ -52,6 +53,96 @@ export default {
     }
   },
   methods: {
+    // 轮询订单支付的状态
+    checkPayStatus () {
+      // 获取token
+      const token = this.$store.state.user.userInfo.token
+      this.$axios({
+        url: '/airorders/checkpay',
+        method: 'post',
+        data: {
+          id: this.$route.query.id, // 订单id
+          out_trade_no: this.allData.orderNo, // 订单编号
+          nonce_str: this.allData.price// 订单金额
+        },
+        headers: {
+          Authorization: 'Bearer ' + token
+        }
+      }).then((res) => {
+        window.console.log(res)
+        // 未支付
+        if (res.data.trade_state === 'NOTPAY') {
+          // 等待支付，不断轮询;;间隔一秒就询问一次，直到订单状态支付成功
+          setTimeout(() => {
+            // 自调用自己，询问订单支付情况
+            this.checkPayStatus()
+          }, 1000)
+        } else {
+          // 一直到状态的不再是 等待支付,
+          // 要么成功要么失败, 不管是什么我都把后台传回来的状态文字 打印出来 this.$message
+          // 这里是简单判断成功与否
+          // this.$message(res.data.statusTxt);
+          // 如果有支付成功页的话,这里可以继续接跳转
+          this.payFinish(res.data.trade_state)
+          // 各种支付状态:
+          // SUCCESS—支付成功
+
+          // REFUND—转入退款
+
+          // NOTPAY—未支付
+
+          // CLOSED—已关闭
+
+          // REVOKED—已撤销（付款码支付）
+
+          // USERPAYING--用户支付中（付款码支付）
+
+          // PAYERROR--支付失败(其他原因，如银行返回失败)
+        }
+      })
+    },
+    // 使用switch判断；也可以用户if-else判断
+    payFinish (tradeState) {
+      switch (tradeState) {
+        case 'SUCCESS':
+          this.$message({
+            message: '支付成功',
+            type: 'success'
+          })
+          break
+
+        case 'REFUND':
+          this.$message({
+            message: '转入退款',
+            type: 'info'
+          })
+          break
+
+        case 'CLOSED':
+          this.$message({
+            message: '已关闭',
+            type: 'info'
+          })
+          break
+
+        case 'REVOKED':
+          this.$message({
+            message: '已撤销',
+            type: 'info'
+          })
+          break
+
+        case 'PAYERROR':
+          this.$message({
+            message: '支付失败(其他原因，如银行返回失败)',
+            type: 'error'
+          })
+          break
+
+        default:
+          break
+      }
+    },
     // 封装获取订单详情的方法
     loadData () {
       // 获取token值this.$store.state.user.userInfo.token
@@ -74,6 +165,7 @@ export default {
           // Qrcode 插件 使用 toCanvas 方法可以直接生成 canvas 图像
           // 用到三个参数, canvas dom, text(链接)--订单数据中code_url连接, options(选项,现在只用到宽度设置)
           Qrcode.toCanvas(this.$refs.qrCanvas, this.allData.payInfo.code_url, { width: 200 })// 实现订单二维码生成
+          this.checkPayStatus()// 判断订单有无支付；调用轮询
         })
       }
     }
