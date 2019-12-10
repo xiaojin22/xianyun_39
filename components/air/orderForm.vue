@@ -140,7 +140,7 @@ export default {
       // 订单总价格；；；this.users.length乘机人的人数
       let flightsPrice = 0
       // 机票价格
-      flightsPrice += (this.data.base_price * this.users.length)
+      flightsPrice += (this.data.airorders.price * this.users.length)
       // 保险价格
       this.insurances.forEach((id) => {
         // [1,2,666]；； // 这里面遍历的是选中的 保险id

@@ -32,12 +32,12 @@
     </el-row>
     <el-row type="flex" justify="space-between" class="info-bar">
       <span>成人机票</span>
-      <span>￥1345</span>
+      <span>￥{{ data.airorders.price }}</span>
       <span>x{{ asideData.numUsers }}</span>
     </el-row>
     <el-row type="flex" justify="space-between" class="info-bar">
       <span>机建＋燃油</span>
-      <span>¥50/人/单程</span>
+      <span>¥{{ data.airport_tax_audlet }}/人/单程</span>
       <span>x{{ asideData.numUsers }}</span>
     </el-row>
     <el-row type="flex" justify="space-between" align="middle" class="info-bar">

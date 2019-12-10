@@ -25,7 +25,8 @@ export default {
     return {
       // 机票详情数据
       flightsData: {
-        insurances: []// 默认给一个空数组，防止异步请求还没数据，报错
+        insurances: [], // 默认给一个空数组，防止异步请求还没数据，报错
+        airorders: {}
       },
       asideData: {
         allPrice: 0, // 订单总价格
@@ -52,7 +53,8 @@ export default {
   methods: {
     // 接受表单组件传递过来订单价格存到本身的data 当中；
     setPrice (asideData) {
-      window.console.log('价格改变了')
+      console.log('价格改变了')
+      // alert('价格改变了')
       this.asideData = asideData// 包订单价格和乘机人数
     }
   }
